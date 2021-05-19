@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://characters/sprites/Enemies/love-bat-idle.png" type="Texture" id=1]
+[ext_resource path="res://characters/enemies/Love_bat.gd" type="Script" id=2]
+[ext_resource path="res://characters/sprites/Enemies/love-bat-fire.png" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 450, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 450, 450 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "shoot",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=5]
+radius = 130.575
+
+[node name="Love_bat" type="KinematicBody2D"]
+script = ExtResource( 2 )
+
+[node name="sprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 4 )
+playing = true
+
+[node name="hitbox" type="Area2D" parent="sprite"]
+
+[node name="hitbox_shape" type="CollisionShape2D" parent="sprite/hitbox"]
+position = Vector2( -6.60712, 8.49487 )
+shape = SubResource( 5 )
+
+[node name="hitbox_shape2" type="CollisionShape2D" parent="."]
+position = Vector2( -3.30356, 4.24744 )
+scale = Vector2( 0.5, 0.5 )
+shape = SubResource( 5 )
+
+[node name="fire_rate" type="Timer" parent="."]
+wait_time = 1.5
+autostart = true
+
+[connection signal="timeout" from="fire_rate" to="." method="_on_fire_rate_timeout"]
