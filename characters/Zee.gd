@@ -24,14 +24,22 @@ var jumps = max_jumps
 var left_pressed
 var right_pressed
 
-# boolean properties
-var jumping = false
-var falling = false
-var crouching = false
-var punching = false
-var can_move = true
-var can_jump = true
-var can_punch = true
+var punch_cooldown = false
+
+# ratchet state machine
+var states = [
+	"idle",
+	"walk",
+	"jump",
+	"falling",
+	"crouch",
+	"punch"
+]
+var current_state = "idle"
+var can_walk_states = ["idle", "walk", "crouch"]
+var can_jump_states = ["idle", "walk", "crouch"]
+var can_crouch_states = ["idle", "walk"]
+var can_punch_states = ["idle", "walk"]
 
 func _ready():
 	Global.player = self
@@ -41,8 +49,8 @@ func get_input():
 	right_pressed = Input.is_action_pressed("ui_right")
 	
 	# calculates horizontal acceleration/velocity
-	if can_move and abs(vel.x) < MAX_HORIZONTAL_VELOCITY and (left_pressed or right_pressed):
-		crouching = false
+	if current_state in can_walk_states and abs(vel.x) < MAX_HORIZONTAL_VELOCITY and (left_pressed or right_pressed):
+		current_state = "walk"
 		vel.x += run_accel * (int(right_pressed) - int(left_pressed))
 	elif vel.x > 0:		
 		vel.x -= stop_accel
@@ -54,7 +62,7 @@ func get_input():
 		jumps = max_jumps
 		
 	# if you can jump and a jump is input, jump
-	if jumps > 0 and can_jump and Input.is_action_just_pressed("ui_up"):
+	if current_state in can_jump_states and jumps > 0 and Input.is_action_just_pressed("ui_up"):
 		jump()
 		
 	# fast fall if you press down and are in the air
@@ -62,26 +70,23 @@ func get_input():
 	if Input.is_action_pressed("ui_down"):
 		if !is_on_floor(): 
 			fastfall()
-		if is_on_floor():
-			crouching = true
+		if current_state in can_crouch_states and is_on_floor():
+			current_state = "crouch"
 			vel.x = 0
 	
 	if Input.is_action_just_released("ui_down"):
-		crouching = false
+		current_state = "idle"
 		
 	# punch
-	if can_punch and is_on_floor() and Input.is_action_just_pressed("a"):
+	if current_state in can_punch_states and is_on_floor() and !punch_cooldown and Input.is_action_just_pressed("a"):
 		punch()
-	
+
+func show_sprite() -> void:
 	# flip sprite depending on which way facing
 	if vel.x > 0:
 		sprite.flip_h = false
-		$smoke.flip_h = false
-		$punch.flip_h = false
 	elif vel.x < 0:
 		sprite.flip_h = true
-		$smoke.flip_h = true
-		$punch.flip_h = true
 		
 	# if in the air
 	if !is_on_floor():
@@ -98,10 +103,9 @@ func get_input():
 	# if on the floor
 	elif is_on_floor():
 		# crouching
-		if crouching:
+		if current_state == "crouch":
 			sprite.play("crouch")
-		elif punching:
-			$smoke.play("smoke")
+		elif current_state == "punch":
 			sprite.play("punch")
 		# standing still
 		elif vel.x == 0: 
@@ -115,11 +119,11 @@ func _physics_process(delta):
 		vel.y += GRAVITY;
 	# calculate motion (normalized)
 	get_input()
+	show_sprite()
 	# warning-ignore:return_value_discarded
 	move_and_slide(vel * delta * 60, UP)	
 
-# warning-ignore:unused_argument
-func _process(delta):
+func _process(_delta):
 	pass
 	
 func jump():
@@ -131,21 +135,15 @@ func fastfall():
 		vel.y += fastfall_speed
 
 func punch():
-	punching = true
-	can_jump = false
-	can_move = false
-	can_punch = false
-	$punch.visible = true
-	$punch/hitbox/shape.disabled = false
+	current_state = "punch"
+	punch_cooldown = true
+	$punch_hitbox/shape.disabled = false
 	yield(get_tree().create_timer(0.2), "timeout")
-	$punch.visible = false
-	$punch/hitbox/shape.disabled = true
-	punching = false
-	can_jump = true
-	can_move = true
+	$punch_hitbox/shape.disabled = true
+	current_state = "idle"
 	# attack speed timer
-	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")	
-	can_punch = true
+	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
+	punch_cooldown = false
 
 func _on_hurtbox_area_entered(area):
 	if area.is_in_group("player_damager"):

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/spritesheet.png-47dc3872d22c365ecf3550b6aefa2312.stex"
+path="res://.import/zee_punch_v2.png-fb5a65ff3896bc3320c44f676ef8a158.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/sprites/Zee/spritesheet.png"
-dest_files=[ "res://.import/spritesheet.png-47dc3872d22c365ecf3550b6aefa2312.stex" ]
+source_file="res://characters/sprites/Zee/zee_punch_v2.png"
+dest_files=[ "res://.import/zee_punch_v2.png-fb5a65ff3896bc3320c44f676ef8a158.stex" ]
 
 [params]
 

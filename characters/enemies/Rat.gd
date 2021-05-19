@@ -16,14 +16,21 @@ func _ready():
 	pass # Replace with function body.
 
 func _physics_process(delta):
+	while vel.x > 0:
+		vel.x -= 10
 	if !is_on_floor():
 		vel.y += GRAVITY;
 	# warning-ignore:return_value_discarded
 	move_and_slide(vel * delta * 60, UP)	
+
+func knockback() -> void:
+	vel.y += 1000
+	vel.x += 100
 
 func _on_hurtbox_area_entered(area):
 	health -= 10
 	if health <= 0:
 		queue_free()
 	if area.is_in_group("enemy_damager"):
+		knockback()
 		print("ouch!")
