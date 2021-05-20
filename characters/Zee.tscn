@@ -226,4 +226,5 @@ disabled = true
 position = Vector2( -0.648651, -6.81618 )
 shape = SubResource( 27 )
 
+[connection signal="area_entered" from="punch_hitbox" to="." method="_on_punch_hitbox_area_entered"]
 [connection signal="area_entered" from="hurtbox" to="." method="_on_hurtbox_area_entered"]

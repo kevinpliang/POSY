@@ -32,6 +32,7 @@ position = Vector2( -0.704895, -42.7149 )
 frames = SubResource( 2 )
 
 [node name="hurtbox" type="Area2D" parent="." groups=[
+"enemy",
 "player_damager",
 ]]
 

@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+onready var hit_effect = preload("res://objects/effects/Hit_effects.tscn")
+
 onready var sprite = $sprite;
 
 # physics constants
@@ -149,5 +151,8 @@ func _on_hurtbox_area_entered(area):
 	if area.is_in_group("player_damager"):
 		get_tree().reload_current_scene()
 
-func _on_smoke_animation_finished():
-	$smoke.stop()
+func _on_punch_hitbox_area_entered(area):
+	if area.is_in_group("enemy"):
+		var impact_point = $punch_hitbox.global_position + Vector2(50, 0)
+		var hit_circles = Global.instance_node_at(hit_effect, impact_point, Global.main)
+		hit_circles.emitting = true
