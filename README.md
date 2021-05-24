@@ -1,2 +1,2 @@
-# flying-dog
+# POSY
 WIP metroidvania
