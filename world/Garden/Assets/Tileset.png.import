@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/temp_tile_64.png-f9fbe932215d435a6f7fb8f88becfa99.stex"
+path="res://.import/Tileset.png-e28e48d253584261e897abdfd59e3928.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/Nobel/Assets/temp_tile_64.png"
-dest_files=[ "res://.import/temp_tile_64.png-f9fbe932215d435a6f7fb8f88becfa99.stex" ]
+source_file="res://world/Garden/Assets/Tileset.png"
+dest_files=[ "res://.import/Tileset.png-e28e48d253584261e897abdfd59e3928.stex" ]
 
 [params]
 

@@ -8,9 +8,19 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node",
+"class": "StateMachine",
+"language": "GDScript",
+"path": "res://characters/StateMachine.gd"
+} ]
+_global_script_class_icons={
+"StateMachine": ""
+}
+
 [application]
 
-config/name="flying-dog"
+config/name="posy"
 run/main_scene="res://game/Main.tscn"
 config/icon="res://icon.png"
 

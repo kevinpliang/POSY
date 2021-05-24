@@ -100,7 +100,7 @@ func show_sprite() -> void:
 		elif vel.y <= 0 and jumps == 0:
 			sprite.play("double_jump")
 		# falling
-		elif vel.y > 0 and jumps == 1: 
+		elif vel.y > 0 and jumps != 0: 
 			sprite.play("fall")
 	# if on the floor
 	elif is_on_floor():
