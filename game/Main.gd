@@ -1,7 +1,6 @@
 extends Node
 
 onready var Zee = preload("res://characters/Zee.tscn")
-onready var Zee2 = preload("res://characters/Zee2.tscn")
 onready var Test_stage = preload("res://world/Test_stage.tscn")
 onready var Nobel = preload("res://world/Garden/Garden.tscn")
 
@@ -18,5 +17,5 @@ func _ready():
 	#Global.instance_node(Test_stage, self);
 	Global.instance_node(Nobel, self);
 
-func _process(delta):
+func _process(_delta):
 	pass

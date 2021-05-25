@@ -19,7 +19,7 @@ func _physics_process(delta):
 	vel.y = cos(time * freq) * amplitude
 	move_and_slide(vel * delta * 60)
 
-func _process(delta):
+func _process(_delta):
 	if vel.x < 0:
 		sprite.flip_h = true
 	else:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://characters/Zee.gd" type="Script" id=1]
 [ext_resource path="res://characters/sprites/Zee/zee_idle_walk.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://characters/sprites/Zee/zee_crouch.png" type="Texture" id=6]
 [ext_resource path="res://characters/sprites/Zee/zee_punch_v2.png" type="Texture" id=7]
 [ext_resource path="res://game/Camera.tscn" type="PackedScene" id=8]
+[ext_resource path="res://resources/Arial/arialbd.ttf" type="DynamicFontData" id=9]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -26,128 +27,128 @@ region = Rect2( 900, 0, 450, 450 )
 
 [sub_resource type="AtlasTexture" id=4]
 flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 0, 0, 450, 450 )
+atlas = ExtResource( 2 )
+region = Rect2( 1350, 0, 450, 450 )
 
 [sub_resource type="AtlasTexture" id=5]
 flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 450, 0, 450, 450 )
+atlas = ExtResource( 2 )
+region = Rect2( 1800, 0, 450, 450 )
 
 [sub_resource type="AtlasTexture" id=6]
 flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 900, 0, 450, 450 )
+atlas = ExtResource( 2 )
+region = Rect2( 2250, 0, 450, 450 )
 
 [sub_resource type="AtlasTexture" id=7]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 1350, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=8]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 1800, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=9]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 2250, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=10]
-flags = 4
-atlas = ExtResource( 5 )
-region = Rect2( 0, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=11]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=12]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 900, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=13]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 450, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=14]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 1350, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=15]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 2250, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=16]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 3150, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=17]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 4050, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=18]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 4950, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=19]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 5850, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=20]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 6750, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=21]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 7650, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=22]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 1350, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=23]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 1800, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=24]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 2250, 0, 450, 450 )
-
-[sub_resource type="AtlasTexture" id=25]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 2700, 0, 450, 450 )
 
-[sub_resource type="AtlasTexture" id=26]
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 900, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 450, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 1350, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=12]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 2250, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=13]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 3150, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=14]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 4050, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=15]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 4950, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=16]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 5850, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=17]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 6750, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=18]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 7650, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=19]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=20]
 flags = 4
 atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 450, 450 )
 
-[sub_resource type="AtlasTexture" id=27]
+[sub_resource type="AtlasTexture" id=21]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 450, 450 )
 
-[sub_resource type="AtlasTexture" id=28]
+[sub_resource type="AtlasTexture" id=22]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 450, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=23]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=24]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 450, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=25]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 900, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=26]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 1350, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=27]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 1800, 0, 450, 450 )
+
+[sub_resource type="AtlasTexture" id=28]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 2250, 0, 450, 450 )
 
 [sub_resource type="SpriteFrames" id=29]
 animations = [ {
@@ -156,39 +157,39 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [  ],
-"loop": false,
-"name": "long_jump",
-"speed": 10.0
-}, {
-"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
-"loop": false,
-"name": "punch",
-"speed": 15.0
-}, {
-"frames": [ SubResource( 10 ) ],
-"loop": true,
-"name": "fall",
-"speed": 1.0
-}, {
-"frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ) ],
-"loop": true,
-"name": "double_jump",
-"speed": 35.0
-}, {
-"frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ) ],
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
 "loop": true,
 "name": "walk",
 "speed": 8.0
 }, {
-"frames": [ SubResource( 26 ) ],
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
+"loop": true,
+"name": "double_jump",
+"speed": 35.0
+}, {
+"frames": [ SubResource( 19 ) ],
+"loop": true,
+"name": "fall",
+"speed": 1.0
+}, {
+"frames": [ SubResource( 20 ) ],
 "loop": true,
 "name": "crouch",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 27 ), SubResource( 28 ) ],
+"frames": [ SubResource( 21 ), SubResource( 22 ) ],
 "loop": false,
 "name": "straight_jump",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
+"loop": false,
+"name": "punch",
+"speed": 25.0
+}, {
+"frames": [  ],
+"loop": false,
+"name": "long_jump",
 "speed": 10.0
 } ]
 
@@ -201,6 +202,12 @@ height = 129.131
 
 [sub_resource type="CircleShape2D" id=32]
 radius = 27.0046
+
+[sub_resource type="DynamicFont" id=33]
+size = 25
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 9 )
 
 [node name="Zee" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -232,6 +239,19 @@ position = Vector2( -0.648651, -6.81618 )
 shape = SubResource( 32 )
 
 [node name="Camera" parent="." instance=ExtResource( 8 )]
+
+[node name="state_label" type="Label" parent="."]
+margin_left = -102.0
+margin_top = -128.0
+margin_right = 97.0
+margin_bottom = -66.0
+custom_fonts/font = SubResource( 33 )
+text = "test"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="area_entered" from="punch_hitbox" to="." method="_on_punch_hitbox_area_entered"]
 [connection signal="area_entered" from="hurtbox" to="." method="_on_hurtbox_area_entered"]

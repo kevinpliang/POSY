@@ -5,11 +5,12 @@ onready var hit_effect = preload("res://objects/effects/Hit_effects.tscn")
 onready var sprite = $sprite;
 
 # physics constants
-const run_accel = 160
+const run_accel = 300
 const stop_accel = 160
-const jump_speed = -1350
+const jump_speed = -1300
+const air_x_accel = 250
 const fastfall_speed = 200
-const max_jumps = 2
+const MAX_JUMPS = 2
 
 const MAX_HORIZONTAL_VELOCITY = 600
 const MAX_VERTICAL_VELOCITY = 2000
@@ -21,137 +22,186 @@ const ATTACK_SPEED = 0.2
 
 # properties
 var vel = Vector2()
-var x_accel = 0
-var jumps = max_jumps
+var jumps = MAX_JUMPS
 var left_pressed
 var right_pressed
+var horizontal_pressed
 
+# timer variables
 var punch_cooldown = false
 
-# ratchet state machine
-var states = [
-	"idle",
-	"walk",
-	"jump",
-	"falling",
-	"crouch",
-	"punch"
-]
-var current_state = "idle"
-var can_walk_states = ["idle", "walk", "crouch"]
-var can_jump_states = ["idle", "walk", "crouch"]
-var can_crouch_states = ["idle", "walk"]
-var can_punch_states = ["idle", "walk"]
+# ratchet state machine 2.0
+var current_state; 
+enum STATES { IDLE, WALK, JUMP, DJUMP, FALL, FFALL, CROUCH, PUNCH };
+var can_go_from = {
+	# from.........to.................................................................................
+	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
+	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.CROUCH, STATES.PUNCH],
+	STATES.JUMP  : [STATES.DJUMP, STATES.FALL],
+	STATES.DJUMP : [STATES.FALL],
+	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.FFALL],
+	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP],
+	STATES.CROUCH: [STATES.IDLE, STATES.WALK, STATES.JUMP],
+	STATES.PUNCH : []
+}
 
-func _ready():
+func _ready() -> void:
 	Global.player = self
+	current_state = STATES.IDLE
 
-func get_input():
+func get_state_from_input():
 	left_pressed = Input.is_action_pressed("ui_left")
 	right_pressed = Input.is_action_pressed("ui_right")
-	
-	# calculates horizontal acceleration/velocity
-	if current_state in can_walk_states and abs(vel.x) < MAX_HORIZONTAL_VELOCITY and (left_pressed or right_pressed):
-		current_state = "walk"
-		vel.x += run_accel * (int(right_pressed) - int(left_pressed))
-	elif vel.x > 0:		
-		vel.x -= stop_accel
-	elif vel.x < 0:
-		vel.x += stop_accel
-	
-	# refresh jumps if on floor
-	if is_on_floor():
-		jumps = max_jumps
-		
-	# if you can jump and a jump is input, jump
-	if current_state in can_jump_states and jumps > 0 and Input.is_action_just_pressed("ui_up"):
-		jump()
-		
-	# fast fall if you press down and are in the air
-	# crouch if on ground
-	if Input.is_action_pressed("ui_down"):
-		if !is_on_floor(): 
-			fastfall()
-		if current_state in can_crouch_states and is_on_floor():
-			current_state = "crouch"
-			vel.x = 0
-	
-	if Input.is_action_just_released("ui_down"):
-		current_state = "idle"
-		
-	# punch
-	if current_state in can_punch_states and is_on_floor() and !punch_cooldown and Input.is_action_just_pressed("a"):
-		punch()
 
-func show_sprite() -> void:
+	# involuntary states (nothing pressed)	
+	if is_on_floor():
+		if current_state != STATES.PUNCH:
+			current_state = STATES.IDLE
+	else:
+		if vel.y > 0: # this sucks but idk how else to do it
+			current_state = STATES.FALL
+
+	# left or right 
+	if left_pressed or right_pressed:
+		if STATES.WALK in can_go_from[current_state]:
+			current_state = STATES.WALK
+
+	# up
+	if Input.is_action_just_pressed("ui_up"):
+		if STATES.JUMP in can_go_from[current_state] and jumps == 2:
+			current_state = STATES.JUMP
+		elif STATES.DJUMP in can_go_from[current_state] and jumps == 1:
+			current_state = STATES.DJUMP
+
+	# down
+	if Input.is_action_pressed("ui_down"):
+		if STATES.FFALL in can_go_from[current_state]:
+			current_state = STATES.FFALL
+		elif STATES.CROUCH in can_go_from[current_state]:
+			current_state = STATES.CROUCH
+		
+	# "a" (default key: p)
+	if Input.is_action_just_pressed("a"):
+		if !punch_cooldown and STATES.PUNCH in can_go_from[current_state]:
+			current_state = STATES.PUNCH
+
+func get_physics_from_state() -> void:
+	# you can always control his horizontal movement
+	horizontal_pressed = int(right_pressed) - int(left_pressed)
+	if horizontal_pressed:
+		if is_on_floor():
+			vel.x += run_accel * horizontal_pressed
+		else:
+			vel.x += air_x_accel * horizontal_pressed
+	else: 
+		if abs(vel.x) < 160:
+			 vel.x = 0
+		elif vel.x > 0:		
+			vel.x -= stop_accel
+		elif vel.x < 0:
+			vel.x += stop_accel
+	
+	vel.x = clamp(vel.x, -MAX_HORIZONTAL_VELOCITY, MAX_HORIZONTAL_VELOCITY)
+
+	match current_state:
+		STATES.IDLE:
+			pass
+		STATES.WALK:
+			pass
+		STATES.JUMP:
+			if jumps == 2:
+				vel.y = jump_speed
+				jumps -= 1
+		STATES.DJUMP:
+			if jumps == 1:
+				vel.y = jump_speed
+				jumps -= 1
+		STATES.FALL:
+			pass
+		STATES.FFALL:
+			if vel.y < MAX_VERTICAL_VELOCITY:
+				vel.y += fastfall_speed
+		STATES.CROUCH:
+			vel.x = 0
+		STATES.PUNCH:
+			vel.x = 0
+			punch()
+
+	# refresh jumps
+	if is_on_floor():
+		jumps = MAX_JUMPS
+
+func apply_gravity() -> void:
+	if !is_on_floor() and vel.y < MAX_VERTICAL_VELOCITY:
+		vel.y += GRAVITY
+
+func get_sprite_from_state() -> void:
 	# flip sprite depending on which way facing
 	if vel.x > 0:
 		sprite.flip_h = false
 	elif vel.x < 0:
 		sprite.flip_h = true
-		
-	# if in the air
-	if !is_on_floor():
-		# jumping -- straight
-		if vel.y <= 0 and vel.x == 0 and jumps == 1: 
-			sprite.play("straight_jump")
-		elif vel.y <= 0 and vel.x != 0 and jumps == 1:
-			sprite.play("straight_jump")
-		elif vel.y <= 0 and jumps == 0:
-			sprite.play("double_jump")
-		# falling
-		elif vel.y > 0 and jumps != 0: 
-			sprite.play("fall")
-	# if on the floor
-	elif is_on_floor():
-		# crouching
-		if current_state == "crouch":
-			sprite.play("crouch")
-		elif current_state == "punch":
-			sprite.play("punch")
-		# standing still
-		elif vel.x == 0: 
-			sprite.play("idle") 
-		# moving horizontally
-		else:
-			sprite.play("walk")
 
-func _physics_process(delta):
-	if !is_on_floor() and vel.y < MAX_VERTICAL_VELOCITY:
-		vel.y += GRAVITY;
-	# calculate motion (normalized)
-	get_input()
-	show_sprite()
+	match current_state:
+		STATES.IDLE:
+			sprite.play("idle")
+		STATES.WALK:
+			sprite.play("walk")
+		STATES.JUMP:
+			sprite.play("straight_jump")
+		STATES.DJUMP:
+			sprite.play("double_jump")
+		STATES.FALL:
+			sprite.play("fall")
+		STATES.FFALL:
+			sprite.play("fall")
+		STATES.CROUCH:
+			sprite.play("crouch")
+		STATES.PUNCH:
+			sprite.play("punch")
+
+func _physics_process(delta) -> void:
+	get_state_from_input()
+	apply_gravity()
+	get_physics_from_state()
+	get_sprite_from_state()
 	# warning-ignore:return_value_discarded
 	move_and_slide(vel * delta * 60, UP)	
 
-func _process(_delta):
-	pass
-	
-func jump():
-	jumps -= 1
-	vel.y = jump_speed
+func _process(_delta) -> void:
+	match current_state:
+		STATES.IDLE:
+			$state_label.text = "IDLE"
+		STATES.WALK:
+			$state_label.text = "WALK"
+		STATES.JUMP:
+			$state_label.text = "JUMP"
+		STATES.DJUMP:
+			$state_label.text = "DJUMP"
+		STATES.FALL:
+			$state_label.text = "FALL"
+		STATES.FFALL:
+			$state_label.text = "FFALL"
+		STATES.CROUCH:
+			$state_label.text = "CROUCH"
+		STATES.PUNCH:
+			$state_label.text = "PUNCH"
 
-func fastfall():
-	if vel.y < MAX_VERTICAL_VELOCITY:
-		vel.y += fastfall_speed
-
-func punch():
-	current_state = "punch"
+func punch() -> void:
 	punch_cooldown = true
 	$punch_hitbox/shape.disabled = false
 	yield(get_tree().create_timer(0.2), "timeout")
 	$punch_hitbox/shape.disabled = true
-	current_state = "idle"
+	current_state = STATES.IDLE
 	# attack speed timer
 	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
 	punch_cooldown = false
 
-func _on_hurtbox_area_entered(area):
+func _on_hurtbox_area_entered(area) -> void:
 	if area.is_in_group("player_damager"):
 		get_tree().reload_current_scene()
 
-func _on_punch_hitbox_area_entered(area):
+func _on_punch_hitbox_area_entered(area) -> void:
 	if area.is_in_group("enemy"):
 		var impact_point = $punch_hitbox.global_position + Vector2(50, 0)
 		var hit_circles = Global.instance_node_at(hit_effect, impact_point, Global.main)
