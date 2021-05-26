@@ -1,8 +1,12 @@
 extends KinematicBody2D
 
+# imports
 onready var hit_effect = preload("res://objects/effects/Hit_effects.tscn")
 
+# children
 onready var sprite = $sprite;
+onready var right_raycasts = $wall_raycasts/right
+onready var left_raycasts = $wall_raycasts/left
 
 # physics constants
 const run_accel = 300
@@ -29,20 +33,24 @@ var horizontal_pressed
 
 # timer variables
 var punch_cooldown = false
+var aerial_cooldown = false
 
 # ratchet state machine 2.0
-var current_state; 
-enum STATES { IDLE, WALK, JUMP, DJUMP, FALL, FFALL, CROUCH, PUNCH };
+var current_state;
+var prev_state;
+enum STATES { IDLE, WALK, JUMP, DJUMP, WJUMP, FALL, FFALL, CROUCH, PUNCH, AERIAL };
 var can_go_from = {
 	# from.........to.................................................................................
 	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.CROUCH, STATES.PUNCH],
-	STATES.JUMP  : [STATES.DJUMP, STATES.FALL],
-	STATES.DJUMP : [STATES.FALL],
-	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.FFALL],
-	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP],
+	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
+	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL],
+	STATES.WJUMP : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
+	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.FFALL, STATES.AERIAL],
+	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.AERIAL],
 	STATES.CROUCH: [STATES.IDLE, STATES.WALK, STATES.JUMP],
-	STATES.PUNCH : []
+	STATES.PUNCH : [],
+	STATES.AERIAL: []
 }
 
 func _ready() -> void:
@@ -58,7 +66,7 @@ func get_state_from_input():
 		if current_state != STATES.PUNCH:
 			current_state = STATES.IDLE
 	else:
-		if vel.y > 0: # this sucks but idk how else to do it
+		if STATES.FALL in can_go_from[current_state] and vel.y > 0: # this sucks but idk how else to do it
 			current_state = STATES.FALL
 
 	# left or right 
@@ -70,6 +78,8 @@ func get_state_from_input():
 	if Input.is_action_just_pressed("ui_up"):
 		if STATES.JUMP in can_go_from[current_state] and jumps == 2:
 			current_state = STATES.JUMP
+		#elif STATES.WJUMP in can_go_from[current_state] and jumps == 1 and check_wall():
+			#current_state = STATES.WJUMP
 		elif STATES.DJUMP in can_go_from[current_state] and jumps == 1:
 			current_state = STATES.DJUMP
 
@@ -84,6 +94,9 @@ func get_state_from_input():
 	if Input.is_action_just_pressed("a"):
 		if !punch_cooldown and STATES.PUNCH in can_go_from[current_state]:
 			current_state = STATES.PUNCH
+		if !aerial_cooldown and STATES.AERIAL in can_go_from[current_state]:
+			prev_state = current_state
+			current_state = STATES.AERIAL
 
 func get_physics_from_state() -> void:
 	# you can always control his horizontal movement
@@ -116,6 +129,8 @@ func get_physics_from_state() -> void:
 			if jumps == 1:
 				vel.y = jump_speed
 				jumps -= 1
+		STATES.WJUMP:
+			pass
 		STATES.FALL:
 			pass
 		STATES.FFALL:
@@ -126,6 +141,8 @@ func get_physics_from_state() -> void:
 		STATES.PUNCH:
 			vel.x = 0
 			punch()
+		STATES.AERIAL:
+			aerial()
 
 	# refresh jumps
 	if is_on_floor():
@@ -151,6 +168,8 @@ func get_sprite_from_state() -> void:
 			sprite.play("straight_jump")
 		STATES.DJUMP:
 			sprite.play("double_jump")
+		STATES.WJUMP:
+			pass
 		STATES.FALL:
 			sprite.play("fall")
 		STATES.FFALL:
@@ -159,6 +178,8 @@ func get_sprite_from_state() -> void:
 			sprite.play("crouch")
 		STATES.PUNCH:
 			sprite.play("punch")
+		STATES.AERIAL:
+			sprite.play("aerial")
 
 func _physics_process(delta) -> void:
 	get_state_from_input()
@@ -178,6 +199,8 @@ func _process(_delta) -> void:
 			$state_label.text = "JUMP"
 		STATES.DJUMP:
 			$state_label.text = "DJUMP"
+		STATES.WJUMP:
+			$state_label.text = "WJUMP"
 		STATES.FALL:
 			$state_label.text = "FALL"
 		STATES.FFALL:
@@ -186,6 +209,8 @@ func _process(_delta) -> void:
 			$state_label.text = "CROUCH"
 		STATES.PUNCH:
 			$state_label.text = "PUNCH"
+		STATES.AERIAL:
+			$state_label.text = "AERIAL"
 
 func punch() -> void:
 	punch_cooldown = true
@@ -196,6 +221,24 @@ func punch() -> void:
 	# attack speed timer
 	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
 	punch_cooldown = false
+
+func aerial() -> void:
+	aerial_cooldown = true
+	#$punch_hitbox/shape.disabled = false
+	yield(get_tree().create_timer(0.3), "timeout")
+	#$punch_hitbox/shape.disabled = true
+	current_state = prev_state #not working..try double jumping and kicking then immediately jumping upon landing..this piece of code resets zee to a djump state when he should be going to jump. also strange flickering similar to punch issue
+	# attack speed timer
+	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
+	aerial_cooldown = false
+
+func check_wall(wall_raycasts):
+	for raycast in wall_raycasts.get_children():
+		if raycast.is_colliding():
+			var dot = acos(Vector2.UP.dot(raycast.get_collision_normal()))
+			if dot > PI * 0.45:
+				return true
+	return false
 
 func _on_hurtbox_area_entered(area) -> void:
 	if area.is_in_group("player_damager"):
