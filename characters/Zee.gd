@@ -244,10 +244,10 @@ func punch() -> void:
 
 func aerial() -> void:
 	aerial_cooldown = true
-	#$punch_hitbox/shape.disabled = false
+	$aerial_hitbox/shape.disabled = false
 	$aerial_timer.start()
 	yield($aerial_timer, "timeout")
-	#$punch_hitbox/shape.disabled = true
+	$aerial_hitbox/shape.disabled = true
 	# attack speed timer
 	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
 	aerial_cooldown = false
@@ -270,6 +270,12 @@ func _on_punch_hitbox_area_entered(area) -> void:
 		var hit_circles = Global.instance_node_at(hit_effect, impact_point, Global.main)
 		hit_circles.emitting = true
 
+func _on_aerial_hitbox_area_entered(area):
+	if area.is_in_group("enemy"):
+		var impact_point = $aerial_hitbox.global_position + Vector2(50, 0)
+		var hit_circles = Global.instance_node_at(hit_effect, impact_point, Global.main)
+		hit_circles.emitting = true
+
 func _on_punch_timer_timeout():
 	current_state = STATES.IDLE
 	$punch_timer.stop()
@@ -277,3 +283,5 @@ func _on_punch_timer_timeout():
 func _on_aerial_timer_timeout():
 	current_state = STATES.FALL
 	$aerial_timer.stop()
+
+

@@ -41,6 +41,7 @@ script = ExtResource( 2 )
 [node name="sprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 4 )
+frame = 1
 playing = true
 
 [node name="hitbox" type="Area2D" parent="sprite"]
@@ -49,7 +50,7 @@ playing = true
 position = Vector2( -6.60712, 8.49487 )
 shape = SubResource( 5 )
 
-[node name="hitbox_shape2" type="CollisionShape2D" parent="."]
+[node name="hurtbox2" type="CollisionShape2D" parent="."]
 position = Vector2( -3.30356, 4.24744 )
 scale = Vector2( 0.5, 0.5 )
 shape = SubResource( 5 )
@@ -58,4 +59,5 @@ shape = SubResource( 5 )
 wait_time = 1.5
 autostart = true
 
+[connection signal="area_entered" from="sprite/hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="timeout" from="fire_rate" to="." method="_on_fire_rate_timeout"]

@@ -7,6 +7,7 @@ onready var bullet = preload("res://objects/hazards/Bullet_love.tscn")
 var vel = Vector2(300, 0)
 var speed = 800
 var time = 0
+var health = 100
 
 # for cosine movement
 var freq = 5
@@ -36,3 +37,10 @@ func shoot():
 
 func _on_fire_rate_timeout():
 	shoot()
+
+func _on_hitbox_area_entered(area):
+	health -= 10
+	if health <= 0:
+		queue_free()
+	if area.is_in_group("enemy_damager"):
+		print("ouch!")

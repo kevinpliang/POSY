@@ -11,11 +11,12 @@ onready var Rat = preload("res://characters/enemies/Rat.tscn")
 func _ready():
 	Global.main = self;
 	# OS.window_maximized = true
-	Global.instance_node_at(Zee, Vector2(960,100),self);
-	#Global.instance_node_at(Bat, Vector2(100,300), self)
-	#Global.instance_node_at(Rat, Vector2(1500, 500), self)
+	
 	#Global.instance_node(Test_stage, self);
 	Global.instance_node(Nobel, self);
+	
+	Global.instance_node_at(Zee, Vector2(960,100),self);
+	Global.instance_node_at(Rat, Vector2(500, 500), self)
 
 func _process(_delta):
 	pass
