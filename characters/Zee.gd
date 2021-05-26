@@ -7,6 +7,7 @@ onready var hit_effect = preload("res://objects/effects/Hit_effects.tscn")
 onready var sprite = $sprite;
 onready var right_raycasts = $wall_raycasts/right
 onready var left_raycasts = $wall_raycasts/left
+onready var feetcast = $feetcast
 
 # physics constants
 const run_accel = 300
@@ -42,7 +43,7 @@ enum STATES { IDLE, WALK, JUMP, DJUMP, WJUMP, FALL, FFALL, CROUCH, PUNCH, AERIAL
 var can_go_from = {
 	# from.........to.................................................................................
 	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
-	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.CROUCH, STATES.PUNCH],
+	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
 	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL],
 	STATES.WJUMP : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
@@ -181,11 +182,23 @@ func get_sprite_from_state() -> void:
 		STATES.AERIAL:
 			sprite.play("aerial")
 
+func check_feet():
+	if feetcast.is_colliding():
+		var collider = feetcast.get_collider()
+		# gazebo stairs..
+		if collider.is_in_group("lower_z"):
+			self.z_index = -1
+	else:
+		self.z_index = 0
+
 func _physics_process(delta) -> void:
 	get_state_from_input()
 	apply_gravity()
 	get_physics_from_state()
 	get_sprite_from_state()
+	
+	#checks
+	check_feet()
 	# warning-ignore:return_value_discarded
 	move_and_slide(vel * delta * 60, UP)	
 
@@ -227,7 +240,7 @@ func aerial() -> void:
 	#$punch_hitbox/shape.disabled = false
 	yield(get_tree().create_timer(0.3), "timeout")
 	#$punch_hitbox/shape.disabled = true
-	current_state = prev_state #not working..try double jumping and kicking then immediately jumping upon landing..this piece of code resets zee to a djump state when he should be going to jump. also strange flickering similar to punch issue
+	current_state = STATES.FALL #not working..try double jumping and kicking then immediately jumping upon landing..this piece of code resets zee to a djump state when he should be going to jump. also strange flickering similar to punch issue
 	# attack speed timer
 	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
 	aerial_cooldown = false
