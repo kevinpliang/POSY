@@ -24,6 +24,7 @@ const UP = Vector2(0, -1)
 
 # other constants
 const ATTACK_SPEED = 0.2
+const WDASH_COOLDOWN = 2
 
 # properties
 var vel = Vector2()
@@ -31,6 +32,7 @@ var jumps = MAX_JUMPS
 var left_pressed
 var right_pressed
 var horizontal_pressed
+var can_wavedash
 
 # timer variables
 var punch_cooldown = false
@@ -41,17 +43,17 @@ var current_state;
 var prev_state;
 enum STATES { IDLE, WALK, JUMP, DJUMP, WJUMP, FALL, FFALL, CROUCH, PUNCH, AERIAL };
 var can_go_from = {
-	# from.........to.................................................................................
+	# from.........to.................................................................................................
 	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
-	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL],
+	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL, ],
 	STATES.WJUMP : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
 	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.FFALL, STATES.AERIAL],
 	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.AERIAL],
 	STATES.CROUCH: [STATES.IDLE, STATES.WALK, STATES.JUMP],
 	STATES.PUNCH : [],
-	STATES.AERIAL: []
+	STATES.AERIAL: [],
 }
 
 func _ready() -> void:
@@ -64,7 +66,7 @@ func get_state_from_input():
 
 	# involuntary states (nothing pressed)	
 	if is_on_floor():
-		if current_state != STATES.PUNCH:
+		if STATES.IDLE in can_go_from[current_state]:
 			current_state = STATES.IDLE
 	else:
 		if STATES.FALL in can_go_from[current_state] and vel.y > 0: # this sucks but idk how else to do it
@@ -90,7 +92,7 @@ func get_state_from_input():
 			current_state = STATES.FFALL
 		elif STATES.CROUCH in can_go_from[current_state]:
 			current_state = STATES.CROUCH
-		
+	
 	# "a" (default key: p)
 	if Input.is_action_just_pressed("a"):
 		if !punch_cooldown and STATES.PUNCH in can_go_from[current_state]:
@@ -141,9 +143,11 @@ func get_physics_from_state() -> void:
 			vel.x = 0
 		STATES.PUNCH:
 			vel.x = 0
-			punch()
+			if !punch_cooldown:
+				punch()
 		STATES.AERIAL:
-			aerial()
+			if !aerial_cooldown:
+				aerial()
 
 	# refresh jumps
 	if is_on_floor():
@@ -185,6 +189,9 @@ func get_sprite_from_state() -> void:
 func check_feet():
 	if feetcast.is_colliding():
 		var collider = feetcast.get_collider()
+		var origin = feetcast.global_transform.origin
+		var collision_point = feetcast.get_collision_point()
+		var distance = origin.distance_to(collision_point)
 		# gazebo stairs..
 		if collider.is_in_group("lower_z"):
 			self.z_index = -1
@@ -192,13 +199,13 @@ func check_feet():
 		self.z_index = 0
 
 func _physics_process(delta) -> void:
+	#checks
+	check_feet()
+	
 	get_state_from_input()
 	apply_gravity()
 	get_physics_from_state()
 	get_sprite_from_state()
-	
-	#checks
-	check_feet()
 	# warning-ignore:return_value_discarded
 	move_and_slide(vel * delta * 60, UP)	
 
@@ -228,9 +235,9 @@ func _process(_delta) -> void:
 func punch() -> void:
 	punch_cooldown = true
 	$punch_hitbox/shape.disabled = false
-	yield(get_tree().create_timer(0.2), "timeout")
+	$punch_timer.start()
+	yield($punch_timer, "timeout")
 	$punch_hitbox/shape.disabled = true
-	current_state = STATES.IDLE
 	# attack speed timer
 	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
 	punch_cooldown = false
@@ -238,9 +245,9 @@ func punch() -> void:
 func aerial() -> void:
 	aerial_cooldown = true
 	#$punch_hitbox/shape.disabled = false
-	yield(get_tree().create_timer(0.3), "timeout")
+	$aerial_timer.start()
+	yield($aerial_timer, "timeout")
 	#$punch_hitbox/shape.disabled = true
-	current_state = STATES.FALL #not working..try double jumping and kicking then immediately jumping upon landing..this piece of code resets zee to a djump state when he should be going to jump. also strange flickering similar to punch issue
 	# attack speed timer
 	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
 	aerial_cooldown = false
@@ -262,3 +269,11 @@ func _on_punch_hitbox_area_entered(area) -> void:
 		var impact_point = $punch_hitbox.global_position + Vector2(50, 0)
 		var hit_circles = Global.instance_node_at(hit_effect, impact_point, Global.main)
 		hit_circles.emitting = true
+
+func _on_punch_timer_timeout():
+	current_state = STATES.IDLE
+	$punch_timer.stop()
+
+func _on_aerial_timer_timeout():
+	current_state = STATES.FALL
+	$aerial_timer.stop()
