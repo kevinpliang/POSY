@@ -24,7 +24,7 @@ const UP = Vector2(0, -1)
 
 # other constants
 const ATTACK_SPEED = 0.2
-const MAX_HEALTH = 100
+const MAX_HEALTH = 6
 
 # properties
 var vel = Vector2()
@@ -34,6 +34,9 @@ var left_pressed
 var right_pressed
 var horizontal_pressed
 var can_wavedash
+
+# signals
+signal health_changed(value)
 
 # timer variables
 var punch_cooldown = false
@@ -285,7 +288,8 @@ func check_wall(wall_raycasts):
 
 func _on_hurtbox_area_entered(area) -> void:
 	if area.is_in_group("player_damager"):
-		health -= 20
+		health -= 1
+		emit_signal("health_changed", -1)
 		if health <= 0:
 			# warning-ignore:return_value_discarded
 			get_tree().reload_current_scene()
