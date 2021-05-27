@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://characters/Zee.gd" type="Script" id=1]
 [ext_resource path="res://characters/sprites/Zee/zee_idle_walk.png" type="Texture" id=2]
@@ -249,6 +249,9 @@ radius = 131.86
 [sub_resource type="RectangleShape2D" id=40]
 extents = Vector2( 26.2174, 66.2509 )
 
+[sub_resource type="CircleShape2D" id=46]
+radius = 25.0
+
 [sub_resource type="CircleShape2D" id=43]
 radius = 27.0046
 
@@ -326,6 +329,11 @@ disabled = true
 modulate = Color( 0, 0.0862745, 1, 1 )
 position = Vector2( -1.87289, 3.28711 )
 shape = SubResource( 40 )
+
+[node name="djump_collision_box" type="CollisionShape2D" parent="."]
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 0, -20 )
+shape = SubResource( 46 )
 
 [node name="hurtbox" type="Area2D" parent="."]
 

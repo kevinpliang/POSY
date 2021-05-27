@@ -201,12 +201,13 @@ func get_sprite_from_state() -> void:
 func get_hitbox_from_state() -> void:
 	match current_state:
 		STATES.DJUMP:
-			$collision_changer.play("djump_collision")
+			$collision_box.disabled = true
+			$djump_collision_box.disabled = false
 		STATES.CROUCH:
 			pass
 		_:
-			if prev_state == STATES.DJUMP:
-				$collision_changer.play_backwards("djump_collision")
+			$collision_box.disabled = false
+			$djump_collision_box.disabled = true
 
 func check_feet() -> void:
 	if feetcast.is_colliding():
