@@ -16,6 +16,7 @@ const STOP_ACCEL = 160
 const JUMP_SPEED = -1300
 const AIR_X_ACCEL = 250
 const FASTFALL_SPEED = 200
+const DASH_ACCEL = 1000
 const MAX_JUMPS = 2
 const MAX_HORIZONTAL_VELOCITY = 600
 const MAX_VERTICAL_VELOCITY = 2000
@@ -33,7 +34,7 @@ var jumps = MAX_JUMPS
 var left_pressed
 var right_pressed
 var horizontal_pressed
-var can_wavedash
+var can_dash
 
 # signals
 signal health_changed(value)
@@ -45,16 +46,17 @@ var aerial_cooldown = false
 # ratchet state machine 2.0
 var current_state;
 var prev_state;
-enum STATES { IDLE, WALK, JUMP, DJUMP, WJUMP, FALL, FFALL, CROUCH, PUNCH, AERIAL };
+enum STATES { IDLE, WALK, JUMP, DJUMP, WJUMP, DASH, FALL, FFALL, CROUCH, PUNCH, AERIAL };
 var can_go_from = {
 	# from.........to.................................................................................................
 	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
-	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
-	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL, ],
+	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.AERIAL, STATES.DASH],
+	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL, STATES.DASH],
 	STATES.WJUMP : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
-	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.FFALL, STATES.AERIAL],
-	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.AERIAL],
+	STATES.DASH  : [],
+	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.FFALL, STATES.AERIAL, STATES.DASH],
+	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.AERIAL, STATES.DASH],
 	STATES.CROUCH: [STATES.IDLE, STATES.WALK, STATES.JUMP],
 	STATES.PUNCH : [],
 	STATES.AERIAL: [],
@@ -112,6 +114,12 @@ func get_state_from_input():
 		if !aerial_cooldown and STATES.AERIAL in can_go_from[current_state]:
 			prev_state = current_state
 			current_state = STATES.AERIAL
+	
+	# 'b' (default key: o)
+	if Input.is_action_just_pressed("b"):
+		if can_dash and STATES.DASH in can_go_from[current_state]:
+			prev_state = current_state
+			current_state = STATES.DASH
 
 func get_physics_from_state() -> void:
 	# you can always control his horizontal movement
@@ -119,6 +127,8 @@ func get_physics_from_state() -> void:
 	if horizontal_pressed:
 		if is_on_floor():
 			vel.x += RUN_ACCEL * horizontal_pressed
+		elif current_state == STATES.DASH:
+			pass
 		else:
 			vel.x += AIR_X_ACCEL * horizontal_pressed
 	else: 
@@ -129,7 +139,8 @@ func get_physics_from_state() -> void:
 		elif vel.x < 0:
 			vel.x += STOP_ACCEL
 	
-	vel.x = clamp(vel.x, -MAX_HORIZONTAL_VELOCITY, MAX_HORIZONTAL_VELOCITY)
+	if current_state != STATES.DASH:
+		vel.x = clamp(vel.x, -MAX_HORIZONTAL_VELOCITY, MAX_HORIZONTAL_VELOCITY)
 
 	match current_state:
 		STATES.IDLE:
@@ -146,6 +157,12 @@ func get_physics_from_state() -> void:
 				jumps -= 1
 		STATES.WJUMP:
 			pass
+		STATES.DASH:
+			if can_dash:
+				if sprite.flip_h:
+					dash(-1)
+				else:
+					dash(1)
 		STATES.FALL:
 			pass
 		STATES.FFALL:
@@ -164,17 +181,19 @@ func get_physics_from_state() -> void:
 	# refresh jumps
 	if is_on_floor():
 		jumps = MAX_JUMPS
+		can_dash = true
 
 func apply_gravity() -> void:
-	if !is_on_floor() and vel.y < MAX_VERTICAL_VELOCITY:
+	if !is_on_floor() and current_state != STATES.DASH and vel.y < MAX_VERTICAL_VELOCITY:
 		vel.y += GRAVITY
 
 func get_sprite_from_state() -> void:
 	# flip sprite depending on which way facing
-	if vel.x > 0:
-		sprite.flip_h = false
-	elif vel.x < 0:
-		sprite.flip_h = true
+	if current_state != STATES.DASH:
+		if vel.x > 0:
+			sprite.flip_h = false
+		elif vel.x < 0:
+			sprite.flip_h = true
 
 	match current_state:
 		STATES.IDLE:
@@ -187,6 +206,8 @@ func get_sprite_from_state() -> void:
 			sprite.play("double_jump")
 		STATES.WJUMP:
 			pass
+		STATES.DASH:
+			sprite.play("dash")
 		STATES.FALL:
 			sprite.play("fall")
 		STATES.FFALL:
@@ -245,6 +266,8 @@ func _process(_delta) -> void:
 			$state_label.text = "DJUMP"
 		STATES.WJUMP:
 			$state_label.text = "WJUMP"
+		STATES.DASH:
+			$state_label.text = "DASH"
 		STATES.FALL:
 			$state_label.text = "FALL"
 		STATES.FFALL:
@@ -279,6 +302,13 @@ func aerial() -> void:
 	# attack speed timer
 	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
 	aerial_cooldown = false
+
+func dash(dir) -> void:
+	can_dash = false
+	vel.y = 0
+	vel.x += dir * DASH_ACCEL
+	$dash_timer.start()
+	yield($dash_timer, "timeout")
 
 func check_wall(wall_raycasts):
 	for raycast in wall_raycasts.get_children():
@@ -316,4 +346,6 @@ func _on_aerial_timer_timeout():
 	current_state = STATES.FALL
 	$aerial_timer.stop()
 
-
+func _on_dash_timer_timeout():
+	current_state = STATES.FALL
+	$dash_timer.stop()
