@@ -201,8 +201,9 @@ func get_sprite_from_state() -> void:
 func get_hitbox_from_state() -> void:
 	match current_state:
 		STATES.DJUMP:
-			$collision_box.disabled = true
-			$djump_collision_box.disabled = false
+			pass
+#			$collision_box.disabled = true
+#			$djump_collision_box.disabled = false
 		STATES.CROUCH:
 			pass
 		_:

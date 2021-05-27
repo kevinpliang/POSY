@@ -1,11 +1,48 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://objects/health-bar/sprites/bulb.png" type="Texture" id=1]
+[ext_resource path="res://objects/health-bar/sprites/v2/petal1_v2.png" type="Texture" id=1]
 [ext_resource path="res://objects/health-bar/Healthbar.gd" type="Script" id=2]
+[ext_resource path="res://objects/health-bar/sprites/v2/bulb_v2.png" type="Texture" id=3]
+[ext_resource path="res://objects/health-bar/sprites/v2/petal4_v2.png" type="Texture" id=4]
+[ext_resource path="res://objects/health-bar/sprites/v2/petal5v2.png" type="Texture" id=5]
+[ext_resource path="res://objects/health-bar/sprites/v2/petal6_v2.png" type="Texture" id=6]
+[ext_resource path="res://objects/health-bar/sprites/v2/petal3_v2.png" type="Texture" id=7]
+[ext_resource path="res://objects/health-bar/sprites/v2/petal2_v2.png" type="Texture" id=8]
 
 [node name="Bulb" type="Sprite"]
-position = Vector2( 7.94598, 5.29732 )
+position = Vector2( -7.19013, -5.63429 )
 scale = Vector2( 0.5, 0.5 )
 z_index = 2
-texture = ExtResource( 1 )
+texture = ExtResource( 3 )
+flip_h = true
 script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+show_behind_parent = true
+texture = ExtResource( 1 )
+flip_h = true
+
+[node name="Sprite2" type="Sprite" parent="."]
+show_behind_parent = true
+texture = ExtResource( 8 )
+flip_h = true
+
+[node name="Sprite3" type="Sprite" parent="."]
+show_behind_parent = true
+texture = ExtResource( 7 )
+flip_h = true
+
+[node name="Sprite4" type="Sprite" parent="."]
+show_behind_parent = true
+texture = ExtResource( 4 )
+flip_h = true
+
+[node name="Sprite5" type="Sprite" parent="."]
+show_behind_parent = true
+texture = ExtResource( 5 )
+flip_h = true
+
+[node name="Sprite6" type="Sprite" parent="."]
+show_behind_parent = true
+texture = ExtResource( 6 )
+flip_h = true

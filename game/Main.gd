@@ -14,7 +14,7 @@ func _ready():
 	Global.main = self;
 	# OS.window_maximized = true
 	
-	#Global.instance_node(Test_stage, self);
+	# Global.instance_node(Test_stage, self);
 	Global.instance_node(Nobel, self);
 	
 	Global.instance_node_at(Zee, Vector2(960,100),self);
