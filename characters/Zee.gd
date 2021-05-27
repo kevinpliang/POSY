@@ -68,35 +68,43 @@ func get_state_from_input():
 	# involuntary states (nothing pressed)	
 	if is_on_floor():
 		if STATES.IDLE in can_go_from[current_state]:
+			prev_state = current_state
 			current_state = STATES.IDLE
 	else:
 		if STATES.FALL in can_go_from[current_state] and vel.y > 0: # this sucks but idk how else to do it
+			prev_state = current_state
 			current_state = STATES.FALL
 
 	# left or right 
 	if left_pressed or right_pressed:
 		if STATES.WALK in can_go_from[current_state]:
+			prev_state = current_state
 			current_state = STATES.WALK
 
 	# up
 	if Input.is_action_just_pressed("ui_up"):
 		if STATES.JUMP in can_go_from[current_state] and jumps == 2:
+			prev_state = current_state
 			current_state = STATES.JUMP
 		#elif STATES.WJUMP in can_go_from[current_state] and jumps == 1 and check_wall():
 			#current_state = STATES.WJUMP
 		elif STATES.DJUMP in can_go_from[current_state] and jumps == 1:
+			prev_state = current_state
 			current_state = STATES.DJUMP
 
 	# down
 	if Input.is_action_pressed("ui_down"):
 		if STATES.FFALL in can_go_from[current_state]:
+			prev_state = current_state
 			current_state = STATES.FFALL
 		elif STATES.CROUCH in can_go_from[current_state]:
+			prev_state = current_state
 			current_state = STATES.CROUCH
 	
 	# "a" (default key: p)
 	if Input.is_action_just_pressed("a"):
 		if !punch_cooldown and STATES.PUNCH in can_go_from[current_state]:
+			prev_state = current_state
 			current_state = STATES.PUNCH
 		if !aerial_cooldown and STATES.AERIAL in can_go_from[current_state]:
 			prev_state = current_state
@@ -190,14 +198,12 @@ func get_sprite_from_state() -> void:
 func get_hitbox_from_state() -> void:
 	match current_state:
 		STATES.DJUMP:
-			$collision_box.shape.extents = Vector2(20, 20)
-			$collision_box.position.y = -20
+			$collision_changer.play("djump_collision")
 		STATES.CROUCH:
-			$collision_box.shape.extents = Vector2(20, 56)
-			$collision_box.position.y = 13.454
+			pass
 		_:
-			$collision_box.shape.extents = Vector2(26.217, 66.251)
-			$collision_box.position.y = 3.287
+			if prev_state == STATES.DJUMP:
+				$collision_changer.play_backwards("djump_collision")
 
 func check_feet() -> void:
 	if feetcast.is_colliding():
@@ -213,8 +219,7 @@ func check_feet() -> void:
 
 func _physics_process(delta) -> void:
 	#checks
-	check_feet()
-	
+	check_feet()	
 	get_state_from_input()
 	apply_gravity()
 	get_physics_from_state()
