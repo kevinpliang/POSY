@@ -8,6 +8,7 @@ onready var sprite = $sprite;
 onready var right_raycasts = $wall_raycasts/right
 onready var left_raycasts = $wall_raycasts/left
 onready var feetcast = $feetcast
+var punch_shape
 
 # physics constants
 const run_accel = 300
@@ -233,11 +234,15 @@ func _process(_delta) -> void:
 			$state_label.text = "AERIAL"
 
 func punch() -> void:
+	if sprite.flip_h:
+		punch_shape = $punch_hitbox/shape_left
+	else:
+		punch_shape = $punch_hitbox/shape_right
 	punch_cooldown = true
-	$punch_hitbox/shape.disabled = false
+	punch_shape.disabled = false
 	$punch_timer.start()
 	yield($punch_timer, "timeout")
-	$punch_hitbox/shape.disabled = true
+	punch_shape.disabled = true
 	# attack speed timer
 	yield(get_tree().create_timer(ATTACK_SPEED), "timeout")
 	punch_cooldown = false

@@ -9,16 +9,16 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 212.755, 13.5061 )
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 168.529, 5.22939 )
 
-[sub_resource type="SegmentShape2D" id=4]
+[sub_resource type="SegmentShape2D" id=3]
 b = Vector2( 134.716, 0.0456543 )
 
-[sub_resource type="SegmentShape2D" id=5]
+[sub_resource type="SegmentShape2D" id=4]
 b = Vector2( -132.068, -0.0456543 )
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 178.672, 1.38226 )
 
 [node name="Garden" type="Node"]
@@ -63,21 +63,21 @@ one_way_collision = true
 [node name="Gazebo Roof" type="CollisionShape2D" parent="Gazebo"]
 position = Vector2( 962.661, 378.832 )
 z_index = 1
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 one_way_collision = true
 
 [node name="Left Bar" type="CollisionShape2D" parent="Gazebo"]
 position = Vector2( 806.394, 384.6 )
 rotation = 1.5708
 z_index = 1
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="Right Bar" type="CollisionShape2D" parent="Gazebo"]
 position = Vector2( 1117.35, 384.6 )
 rotation = 4.71239
 z_index = 1
-shape = SubResource( 5 )
+shape = SubResource( 4 )
 one_way_collision = true
 
 [node name="Stair 2" type="StaticBody2D" parent="Gazebo" groups=[
@@ -87,5 +87,5 @@ one_way_collision = true
 [node name="Stair 2" type="CollisionShape2D" parent="Gazebo/Stair 2"]
 position = Vector2( 961.298, 642.536 )
 z_index = 1
-shape = SubResource( 2 )
+shape = SubResource( 5 )
 one_way_collision = true
