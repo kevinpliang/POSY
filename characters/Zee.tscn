@@ -198,7 +198,7 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
 "loop": false,
 "name": "aerial",
 "speed": 30.0
@@ -213,15 +213,15 @@ animations = [ {
 "name": "crouch",
 "speed": 5.0
 }, {
-"frames": [  ],
-"loop": false,
-"name": "long_jump",
-"speed": 10.0
-}, {
 "frames": [ SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ) ],
 "loop": true,
 "name": "double_jump",
 "speed": 35.0
+}, {
+"frames": [  ],
+"loop": false,
+"name": "long_jump",
+"speed": 10.0
 }, {
 "frames": [ SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ) ],
 "loop": true,
@@ -249,10 +249,10 @@ radius = 131.86
 [sub_resource type="RectangleShape2D" id=40]
 extents = Vector2( 26.2174, 66.2509 )
 
-[sub_resource type="CircleShape2D" id=41]
+[sub_resource type="CircleShape2D" id=43]
 radius = 27.0046
 
-[sub_resource type="DynamicFont" id=42]
+[sub_resource type="DynamicFont" id=44]
 size = 25
 outline_size = 4
 outline_color = Color( 0, 0, 0, 1 )
@@ -294,6 +294,7 @@ shape = SubResource( 39 )
 disabled = true
 
 [node name="collision_box" type="CollisionShape2D" parent="."]
+modulate = Color( 0, 0.0862745, 1, 1 )
 position = Vector2( -1.87289, 3.28711 )
 shape = SubResource( 40 )
 
@@ -301,7 +302,7 @@ shape = SubResource( 40 )
 
 [node name="shape" type="CollisionShape2D" parent="hurtbox"]
 position = Vector2( -0.648651, -6.81618 )
-shape = SubResource( 41 )
+shape = SubResource( 43 )
 
 [node name="feetcast" type="RayCast2D" parent="."]
 position = Vector2( 0, 55 )
@@ -345,7 +346,7 @@ margin_left = -102.0
 margin_top = -128.0
 margin_right = 97.0
 margin_bottom = -66.0
-custom_fonts/font = SubResource( 42 )
+custom_fonts/font = SubResource( 44 )
 text = "test"
 align = 1
 valign = 1

@@ -11,13 +11,12 @@ onready var feetcast = $feetcast
 var punch_shape
 
 # physics constants
-const run_accel = 300
-const stop_accel = 160
-const jump_speed = -1300
-const air_x_accel = 250
-const fastfall_speed = 200
+const RUN_ACCEL = 300
+const STOP_ACCEL = 160
+const JUMP_SPEED = -1300
+const AIR_X_ACCEL = 250
+const FASTFALL_SPEED = 200
 const MAX_JUMPS = 2
-
 const MAX_HORIZONTAL_VELOCITY = 600
 const MAX_VERTICAL_VELOCITY = 2000
 const GRAVITY = 100
@@ -25,10 +24,11 @@ const UP = Vector2(0, -1)
 
 # other constants
 const ATTACK_SPEED = 0.2
-const WDASH_COOLDOWN = 2
+const MAX_HEALTH = 100
 
 # properties
 var vel = Vector2()
+var health = MAX_HEALTH
 var jumps = MAX_JUMPS
 var left_pressed
 var right_pressed
@@ -107,16 +107,16 @@ func get_physics_from_state() -> void:
 	horizontal_pressed = int(right_pressed) - int(left_pressed)
 	if horizontal_pressed:
 		if is_on_floor():
-			vel.x += run_accel * horizontal_pressed
+			vel.x += RUN_ACCEL * horizontal_pressed
 		else:
-			vel.x += air_x_accel * horizontal_pressed
+			vel.x += AIR_X_ACCEL * horizontal_pressed
 	else: 
 		if abs(vel.x) < 160:
 			 vel.x = 0
 		elif vel.x > 0:		
-			vel.x -= stop_accel
+			vel.x -= STOP_ACCEL
 		elif vel.x < 0:
-			vel.x += stop_accel
+			vel.x += STOP_ACCEL
 	
 	vel.x = clamp(vel.x, -MAX_HORIZONTAL_VELOCITY, MAX_HORIZONTAL_VELOCITY)
 
@@ -127,11 +127,11 @@ func get_physics_from_state() -> void:
 			pass
 		STATES.JUMP:
 			if jumps == 2:
-				vel.y = jump_speed
+				vel.y = JUMP_SPEED
 				jumps -= 1
 		STATES.DJUMP:
 			if jumps == 1:
-				vel.y = jump_speed
+				vel.y = JUMP_SPEED
 				jumps -= 1
 		STATES.WJUMP:
 			pass
@@ -139,7 +139,7 @@ func get_physics_from_state() -> void:
 			pass
 		STATES.FFALL:
 			if vel.y < MAX_VERTICAL_VELOCITY:
-				vel.y += fastfall_speed
+				vel.y += FASTFALL_SPEED
 		STATES.CROUCH:
 			vel.x = 0
 		STATES.PUNCH:
@@ -187,7 +187,19 @@ func get_sprite_from_state() -> void:
 		STATES.AERIAL:
 			sprite.play("aerial")
 
-func check_feet():
+func get_hitbox_from_state() -> void:
+	match current_state:
+		STATES.DJUMP:
+			$collision_box.shape.extents = Vector2(20, 20)
+			$collision_box.position.y = -20
+		STATES.CROUCH:
+			$collision_box.shape.extents = Vector2(20, 56)
+			$collision_box.position.y = 13.454
+		_:
+			$collision_box.shape.extents = Vector2(26.217, 66.251)
+			$collision_box.position.y = 3.287
+
+func check_feet() -> void:
 	if feetcast.is_colliding():
 		var collider = feetcast.get_collider()
 		var origin = feetcast.global_transform.origin
@@ -207,6 +219,7 @@ func _physics_process(delta) -> void:
 	apply_gravity()
 	get_physics_from_state()
 	get_sprite_from_state()
+	get_hitbox_from_state()
 	# warning-ignore:return_value_discarded
 	move_and_slide(vel * delta * 60, UP)	
 
@@ -267,7 +280,10 @@ func check_wall(wall_raycasts):
 
 func _on_hurtbox_area_entered(area) -> void:
 	if area.is_in_group("player_damager"):
-		get_tree().reload_current_scene()
+		health -= 20
+		if health <= 0:
+			# warning-ignore:return_value_discarded
+			get_tree().reload_current_scene()
 
 func _on_punch_hitbox_area_entered(area) -> void:
 	if area.is_in_group("enemy"):
