@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://world/Garden/Assets/Garden_tilemap.tres" type="TileSet" id=1]
 [ext_resource path="res://world/Garden/Assets/Gazebo_Export-3.png" type="Texture" id=2]
@@ -6,36 +6,54 @@
 [ext_resource path="res://world/Garden/Assets/Gazebo_Export-2.png" type="Texture" id=4]
 [ext_resource path="res://world/Garden/Assets/Gazebo_Export-4.png" type="Texture" id=5]
 [ext_resource path="res://characters/sprites/Dahlia/dahlia_sitting.png" type="Texture" id=6]
+[ext_resource path="res://world/Garden/Dahlia_Sitting.gd" type="Script" id=7]
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 450, 450 )
 
-[sub_resource type="SpriteFrames" id=7]
+[sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ SubResource( 6 ) ],
+"frames": [ SubResource( 1 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 309.128, 201.495 )
+
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 212.755, 13.5061 )
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 168.529, 54.9041 )
 
-[sub_resource type="SegmentShape2D" id=3]
+[sub_resource type="SegmentShape2D" id=6]
 b = Vector2( 134.716, 0.0456543 )
 
-[sub_resource type="SegmentShape2D" id=4]
+[sub_resource type="SegmentShape2D" id=7]
 b = Vector2( -132.068, -0.0456543 )
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 178.672, 1.38226 )
 
 [node name="Garden" type="Node"]
+
+[node name="Dahlia Sitting" type="AnimatedSprite" parent="."]
+position = Vector2( 956.618, 563.722 )
+scale = Vector2( 0.5, 0.5 )
+z_index = -2
+frames = SubResource( 2 )
+script = ExtResource( 7 )
+
+[node name="dialogue_range" type="Area2D" parent="Dahlia Sitting"]
+
+[node name="shape" type="CollisionShape2D" parent="Dahlia Sitting/dialogue_range"]
+modulate = Color( 0.960784, 0.137255, 0.137255, 1 )
+position = Vector2( 15.1021, -5.66309 )
+shape = SubResource( 3 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 follow_viewport_enable = true
@@ -74,12 +92,6 @@ position = Vector2( 960, 504 )
 z_index = -1
 texture = ExtResource( 5 )
 
-[node name="Dahlia Sitting" type="AnimatedSprite" parent="Gazebo"]
-position = Vector2( 956.618, 563.722 )
-scale = Vector2( 0.5, 0.5 )
-z_index = -2
-frames = SubResource( 7 )
-
 [node name="Bench" type="Sprite" parent="Gazebo"]
 position = Vector2( 960, 504 )
 z_index = -2
@@ -94,27 +106,27 @@ texture = ExtResource( 3 )
 modulate = Color( 0.298039, 0.298039, 0.298039, 1 )
 position = Vector2( 962.379, 688.241 )
 z_index = 1
-shape = SubResource( 1 )
+shape = SubResource( 4 )
 one_way_collision = true
 
 [node name="Gazebo Roof" type="CollisionShape2D" parent="Gazebo"]
 position = Vector2( 962.661, 427.622 )
 z_index = 1
-shape = SubResource( 2 )
+shape = SubResource( 5 )
 one_way_collision = true
 
 [node name="Left Bar" type="CollisionShape2D" parent="Gazebo"]
 position = Vector2( 806.394, 384.6 )
 rotation = 1.5708
 z_index = 1
-shape = SubResource( 3 )
+shape = SubResource( 6 )
 one_way_collision = true
 
 [node name="Right Bar" type="CollisionShape2D" parent="Gazebo"]
 position = Vector2( 1117.35, 384.6 )
 rotation = 4.71239
 z_index = 1
-shape = SubResource( 4 )
+shape = SubResource( 7 )
 one_way_collision = true
 
 [node name="Stair 2" type="StaticBody2D" parent="Gazebo" groups=[
@@ -124,5 +136,8 @@ one_way_collision = true
 [node name="Stair 2" type="CollisionShape2D" parent="Gazebo/Stair 2"]
 position = Vector2( 961.298, 642.536 )
 z_index = 1
-shape = SubResource( 5 )
+shape = SubResource( 8 )
 one_way_collision = true
+
+[connection signal="area_entered" from="Dahlia Sitting/dialogue_range" to="Dahlia Sitting" method="_on_dialogue_range_area_entered"]
+[connection signal="area_exited" from="Dahlia Sitting/dialogue_range" to="Dahlia Sitting" method="_on_dialogue_range_area_exited"]
