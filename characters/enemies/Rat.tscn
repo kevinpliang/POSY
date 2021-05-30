@@ -24,6 +24,7 @@ height = 139.247
 extents = Vector2( 67.684, 13.3849 )
 
 [node name="Rat" type="KinematicBody2D"]
+scale = Vector2( 0.5, 0.5 )
 z_index = -1
 script = ExtResource( 2 )
 

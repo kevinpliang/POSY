@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 # imports
 onready var hit_effect = preload("res://objects/effects/Hit_effects.tscn")
+onready var screen_shake = preload("res://objects/effects/Screen_shake.tscn")
 
 # children
 onready var sprite = $sprite;
@@ -277,7 +278,6 @@ func _process(_delta) -> void:
 		STATES.WALK:
 			$state_label.text = "WALK"
 		STATES.HURT:
-			print(vel)
 			$state_label.text = "HURT"
 		STATES.JUMP:
 			$state_label.text = "JUMP"
@@ -339,7 +339,14 @@ func disable_hurtbox() -> void:
 	$hurtbox/shape.disabled = true;
 
 func hurt_effect() -> void:
-	pass
+	$Camera/Screen_shake.start()	
+#	Engine.set_time_scale(0.1)
+#	Engine.set_iterations_per_second(3)
+#	Engine.set_physics_jitter_fix(0)
+#	yield(get_tree().create_timer(0.05), "timeout")
+#	Engine.set_time_scale(1)
+#	Engine.set_iterations_per_second(60)
+#	Engine.set_physics_jitter_fix(0.5)
 
 func check_wall(wall_raycasts):
 	for raycast in wall_raycasts.get_children():

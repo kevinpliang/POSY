@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=2]
+[gd_scene load_steps=60 format=2]
 
 [ext_resource path="res://characters/Zee.gd" type="Script" id=1]
 [ext_resource path="res://characters/sprites/Zee/zee_idle_walk.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://characters/sprites/Zee/zee_aerial.png" type="Texture" id=10]
 [ext_resource path="res://characters/sprites/Zee/zee_dash.png" type="Texture" id=11]
 [ext_resource path="res://characters/sprites/Zee/zee_hurt.png" type="Texture" id=12]
+[ext_resource path="res://objects/effects/Screen_shake.tscn" type="PackedScene" id=13]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -398,6 +399,8 @@ scale = Vector2( 1, 0.8 )
 enabled = true
 
 [node name="Camera" parent="." instance=ExtResource( 8 )]
+
+[node name="Screen_shake" parent="Camera" instance=ExtResource( 13 )]
 
 [node name="state_label" type="Label" parent="."]
 margin_left = -102.0

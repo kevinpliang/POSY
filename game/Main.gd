@@ -22,6 +22,7 @@ func _ready():
 	Global.instance_node_at(Zee, Vector2(960,100),self);
 	Global.instance_node_at(HealthBar, Vector2(150, 150), $UI);
 	Global.instance_node_at(Dialogue, Vector2(0, 0), $UI);
+	# Global.instance_node_at(Bat, Vector2(500, 300), self)
 	Global.instance_node_at(Rat, Vector2(500, 500), self)
 	Global.instance_node_at(Rat, Vector2(2000, 500), self)
 
