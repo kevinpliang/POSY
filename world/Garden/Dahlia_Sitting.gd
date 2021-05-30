@@ -15,7 +15,7 @@ func _process(delta):
 				1:
 					add_child(dialogue1)
 				2:
-					pass			
+					pass
 	
 func _on_dialogue_range_area_entered(area):
 	can_talk = true
