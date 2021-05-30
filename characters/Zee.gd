@@ -16,12 +16,16 @@ const STOP_ACCEL = 160
 const JUMP_SPEED = -1300
 const AIR_X_ACCEL = 250
 const FASTFALL_SPEED = 200
-const DASH_ACCEL = 1000
+const DASH_ACCEL = 1500
 const MAX_JUMPS = 2
 const MAX_HORIZONTAL_VELOCITY = 600
 const MAX_VERTICAL_VELOCITY = 2000
 const GRAVITY = 100
 const UP = Vector2(0, -1)
+const KNOCKBACK_R = Vector2(1500,-1500)
+const KNOCKBACK_L = Vector2(-1500,-1500)
+const KB_STOP_ACCEL = 40
+
 
 # other constants
 const ATTACK_SPEED = 0.2
@@ -46,11 +50,12 @@ var aerial_cooldown = false
 # ratchet state machine 2.0
 var current_state;
 var prev_state;
-enum STATES { IDLE, WALK, JUMP, DJUMP, WJUMP, DASH, FALL, FFALL, CROUCH, PUNCH, AERIAL };
+enum STATES { IDLE, WALK, HURT, JUMP, DJUMP, WJUMP, DASH, FALL, FFALL, CROUCH, PUNCH, AERIAL };
 var can_go_from = {
 	# from.........to.................................................................................................
 	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
+	STATES.HURT  : [],
 	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.AERIAL, STATES.DASH],
 	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL, STATES.DASH],
 	STATES.WJUMP : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
@@ -61,10 +66,12 @@ var can_go_from = {
 	STATES.PUNCH : [],
 	STATES.AERIAL: [],
 }
+var uncontrollable_states = [STATES.DASH, STATES.HURT]
 
 func _ready() -> void:
 	Global.player = self
 	current_state = STATES.IDLE
+	self.connect("health_changed", self, "_on_health_changed")
 
 func get_state_from_input():
 	left_pressed = Input.is_action_pressed("ui_left")
@@ -124,13 +131,18 @@ func get_state_from_input():
 func get_physics_from_state() -> void:
 	# you can always control his horizontal movement
 	horizontal_pressed = int(right_pressed) - int(left_pressed)
-	if horizontal_pressed:
+	if horizontal_pressed and !(current_state in uncontrollable_states):
 		if is_on_floor():
 			vel.x += RUN_ACCEL * horizontal_pressed
-		elif current_state == STATES.DASH:
-			pass
 		else:
 			vel.x += AIR_X_ACCEL * horizontal_pressed
+	elif current_state == STATES.HURT:
+		if abs(vel.x) < 20:
+			 vel.x = 0
+		if vel.x > 0:		
+			vel.x -= KB_STOP_ACCEL
+		elif vel.x < 0:
+			vel.x += KB_STOP_ACCEL
 	else: 
 		if abs(vel.x) < 160:
 			 vel.x = 0
@@ -139,13 +151,15 @@ func get_physics_from_state() -> void:
 		elif vel.x < 0:
 			vel.x += STOP_ACCEL
 	
-	if current_state != STATES.DASH:
+	if !(current_state in uncontrollable_states):
 		vel.x = clamp(vel.x, -MAX_HORIZONTAL_VELOCITY, MAX_HORIZONTAL_VELOCITY)
 
 	match current_state:
 		STATES.IDLE:
 			pass
 		STATES.WALK:
+			pass
+		STATES.HURT:
 			pass
 		STATES.JUMP:
 			if jumps == 2:
@@ -200,6 +214,8 @@ func get_sprite_from_state() -> void:
 			sprite.play("idle")
 		STATES.WALK:
 			sprite.play("walk")
+		STATES.HURT:
+			sprite.play("hurt")
 		STATES.JUMP:
 			sprite.play("straight_jump")
 		STATES.DJUMP:
@@ -260,6 +276,9 @@ func _process(_delta) -> void:
 			$state_label.text = "IDLE"
 		STATES.WALK:
 			$state_label.text = "WALK"
+		STATES.HURT:
+			print(vel)
+			$state_label.text = "HURT"
 		STATES.JUMP:
 			$state_label.text = "JUMP"
 		STATES.DJUMP:
@@ -310,6 +329,18 @@ func dash(dir) -> void:
 	$dash_timer.start()
 	yield($dash_timer, "timeout")
 
+func knockedback(enemy) -> void:
+	if enemy.position.x > position.x:
+		vel = KNOCKBACK_L
+	if enemy.position.x < position.x:
+		vel = KNOCKBACK_R
+
+func disable_hurtbox() -> void:
+	$hurtbox/shape.disabled = true;
+
+func hurt_effect() -> void:
+	pass
+
 func check_wall(wall_raycasts):
 	for raycast in wall_raycasts.get_children():
 		if raycast.is_colliding():
@@ -320,11 +351,21 @@ func check_wall(wall_raycasts):
 
 func _on_hurtbox_area_entered(area) -> void:
 	if area.is_in_group("player_damager"):
-		health -= 1
 		emit_signal("health_changed", -1)
-		if health <= 0:
-			# warning-ignore:return_value_discarded
-			get_tree().reload_current_scene()
+		var enemy = area.get_parent()
+		knockedback(enemy);
+
+func _on_health_changed(change):
+	health += change;
+	if health <= 0:
+		# warning-ignore:return_value_discarded
+		get_tree().reload_current_scene()
+	elif change < 0:
+		current_state = STATES.HURT;
+		call_deferred("disable_hurtbox")
+		hurt_effect()
+		$invincibility_timer.start()
+		$hurt_timer.start()
 
 func _on_punch_hitbox_area_entered(area) -> void:
 	if area.is_in_group("enemy"):
@@ -340,12 +381,15 @@ func _on_aerial_hitbox_area_entered(area):
 
 func _on_punch_timer_timeout():
 	current_state = STATES.IDLE
-	$punch_timer.stop()
 
 func _on_aerial_timer_timeout():
 	current_state = STATES.FALL
-	$aerial_timer.stop()
 
 func _on_dash_timer_timeout():
 	current_state = STATES.FALL
-	$dash_timer.stop()
+
+func _on_hurt_timer_timeout():
+	current_state = STATES.IDLE
+
+func _on_invincibility_timer_timeout():
+	$hurtbox/shape.disabled = false
