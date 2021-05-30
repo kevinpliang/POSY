@@ -40,6 +40,7 @@ var left_pressed
 var right_pressed
 var horizontal_pressed
 var can_dash
+var just_landed = false
 
 # signals
 signal health_changed(value)
@@ -57,8 +58,8 @@ var can_go_from = {
 	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.HURT  : [],
-	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.AERIAL, STATES.DASH],
-	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL, STATES.DASH],
+	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.FFALL, STATES.AERIAL, STATES.DASH],
+	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL, STATES.FFALL, STATES.DASH],
 	STATES.WJUMP : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
 	STATES.DASH  : [],
 	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.FFALL, STATES.AERIAL, STATES.DASH],
@@ -135,6 +136,8 @@ func get_physics_from_state() -> void:
 	if horizontal_pressed and !(current_state in uncontrollable_states):
 		if is_on_floor():
 			vel.x += RUN_ACCEL * horizontal_pressed
+		elif current_state == STATES.DASH:
+			print ('sup')
 		else:
 			vel.x += AIR_X_ACCEL * horizontal_pressed
 	elif current_state == STATES.HURT:
@@ -193,10 +196,14 @@ func get_physics_from_state() -> void:
 			if !aerial_cooldown:
 				aerial()
 
-	# refresh jumps
 	if is_on_floor():
 		jumps = MAX_JUMPS
 		can_dash = true
+		if !just_landed:
+			just_landed = true
+			vel.y = 800
+	else:
+		just_landed = false
 
 func apply_gravity() -> void:
 	if !is_on_floor() and current_state != STATES.DASH and vel.y < MAX_VERTICAL_VELOCITY:
@@ -337,6 +344,7 @@ func knockedback(enemy) -> void:
 
 func disable_hurtbox() -> void:
 	$hurtbox/shape.disabled = true;
+	$anim_player.play("invincible")
 
 func hurt_effect() -> void:
 	$Camera/Screen_shake.start()	
@@ -400,3 +408,5 @@ func _on_hurt_timer_timeout():
 
 func _on_invincibility_timer_timeout():
 	$hurtbox/shape.disabled = false
+	$anim_player.stop()
+	sprite.modulate.a = 1
