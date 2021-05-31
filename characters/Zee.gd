@@ -16,6 +16,8 @@ const RUN_ACCEL = 300
 const STOP_ACCEL = 160
 const JUMP_SPEED = -1300
 const AIR_X_ACCEL = 250
+const WSLIDE_SPEED = 350  # maximum y velocity when wall sliding
+const WJUMP_VEL = Vector2(1500, -1300)
 const FASTFALL_SPEED = 200
 const DASH_ACCEL = 1500
 const MAX_JUMPS = 2
@@ -27,10 +29,10 @@ const KNOCKBACK_R = Vector2(1500,-1500)
 const KNOCKBACK_L = Vector2(-1500,-1500)
 const KB_STOP_ACCEL = 40
 
-
 # other constants
 const ATTACK_SPEED = 0.2
 const MAX_HEALTH = 6
+const STAY_ON_WALL_TIME = 1
 
 # properties
 var vel = Vector2()
@@ -39,7 +41,9 @@ var jumps = MAX_JUMPS
 var left_pressed
 var right_pressed
 var horizontal_pressed
+var wall_direction = 0
 var can_dash
+var can_wjump
 var just_landed = false
 
 # signals
@@ -52,23 +56,24 @@ var aerial_cooldown = false
 # ratchet state machine 2.0
 var current_state;
 var prev_state;
-enum STATES { IDLE, WALK, HURT, JUMP, DJUMP, WJUMP, DASH, FALL, FFALL, CROUCH, PUNCH, AERIAL };
+enum STATES { IDLE, WALK, HURT, JUMP, DJUMP, WSLIDE, WJUMP, DASH, FALL, FFALL, CROUCH, PUNCH, AERIAL };
 var can_go_from = {
 	# from.........to.................................................................................................
 	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.WALK  : [STATES.IDLE, STATES.JUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
 	STATES.HURT  : [],
-	STATES.JUMP  : [STATES.DJUMP, STATES.FALL, STATES.FFALL, STATES.AERIAL, STATES.DASH],
-	STATES.DJUMP : [STATES.IDLE, STATES.AERIAL, STATES.FFALL, STATES.DASH],
-	STATES.WJUMP : [STATES.DJUMP, STATES.FALL, STATES.AERIAL],
+	STATES.JUMP  : [STATES.DJUMP, STATES.WSLIDE, STATES.FALL, STATES.FFALL, STATES.AERIAL, STATES.DASH],
+	STATES.DJUMP : [STATES.IDLE, STATES.WSLIDE, STATES.AERIAL, STATES.FFALL, STATES.DASH],
+	STATES.WSLIDE: [STATES.IDLE, STATES.FALL, STATES.WJUMP],
+	STATES.WJUMP : [STATES.DJUMP, STATES.WSLIDE, STATES.FALL, STATES.AERIAL],
 	STATES.DASH  : [],
-	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.FFALL, STATES.AERIAL, STATES.DASH],
-	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.AERIAL, STATES.DASH],
+	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.WSLIDE, STATES.FFALL, STATES.AERIAL, STATES.DASH],
+	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.WSLIDE, STATES.AERIAL, STATES.DASH],
 	STATES.CROUCH: [STATES.IDLE, STATES.WALK, STATES.JUMP],
 	STATES.PUNCH : [],
 	STATES.AERIAL: [],
 }
-var uncontrollable_states = [STATES.DASH, STATES.HURT]
+var uncontrollable_states = [STATES.WSLIDE, STATES.WJUMP, STATES.DASH, STATES.HURT]
 
 func _ready() -> void:
 	Global.player = self
@@ -84,6 +89,13 @@ func get_state_from_input():
 		if STATES.IDLE in can_go_from[current_state]:
 			prev_state = current_state
 			current_state = STATES.IDLE
+	elif wall_direction != 0:
+		if (left_pressed and wall_direction == -1) or (right_pressed and wall_direction == 1):
+			if $wslide_timer.is_stopped() and STATES.WSLIDE in can_go_from[current_state]:
+				prev_state = current_state
+				current_state = STATES.WSLIDE
+		elif (Input.is_action_just_released("ui_left") and wall_direction == -1) or (Input.is_action_just_released("ui_right") and wall_direction == 1):
+			pass
 	else:
 		if STATES.FALL in can_go_from[current_state] and vel.y > 0: # this sucks but idk how else to do it
 			prev_state = current_state
@@ -105,6 +117,10 @@ func get_state_from_input():
 		elif STATES.DJUMP in can_go_from[current_state] and jumps == 1:
 			prev_state = current_state
 			current_state = STATES.DJUMP
+		elif STATES.WJUMP in can_go_from[current_state]:
+			$wslide_timer.start()
+			prev_state = current_state
+			current_state = STATES.WJUMP
 
 	# down
 	if Input.is_action_pressed("ui_down"):
@@ -114,6 +130,9 @@ func get_state_from_input():
 		elif STATES.CROUCH in can_go_from[current_state]:
 			prev_state = current_state
 			current_state = STATES.CROUCH
+		elif current_state == STATES.WSLIDE:
+			prev_state = current_state
+			current_state = STATES.FALL
 	
 	# "a" (default key: p)
 	if Input.is_action_just_pressed("a"):
@@ -131,13 +150,10 @@ func get_state_from_input():
 			current_state = STATES.DASH
 
 func get_physics_from_state() -> void:
-	# you can always control his horizontal movement
 	horizontal_pressed = int(right_pressed) - int(left_pressed)
 	if horizontal_pressed and !(current_state in uncontrollable_states):
 		if is_on_floor():
 			vel.x += RUN_ACCEL * horizontal_pressed
-		elif current_state == STATES.DASH:
-			print ('sup')
 		else:
 			vel.x += AIR_X_ACCEL * horizontal_pressed
 	elif current_state == STATES.HURT:
@@ -173,8 +189,11 @@ func get_physics_from_state() -> void:
 			if jumps == 1:
 				vel.y = JUMP_SPEED
 				jumps -= 1
+		STATES.WSLIDE:
+			vel.y = min(vel.y, WSLIDE_SPEED)
 		STATES.WJUMP:
-			pass
+			if can_wjump:
+				wjump()
 		STATES.DASH:
 			if can_dash:
 				if sprite.flip_h:
@@ -228,8 +247,10 @@ func get_sprite_from_state() -> void:
 			sprite.play("straight_jump")
 		STATES.DJUMP:
 			sprite.play("double_jump")
+		STATES.WSLIDE:
+			sprite.play("wall_slide")
 		STATES.WJUMP:
-			pass
+			sprite.play("straight_jump")
 		STATES.DASH:
 			sprite.play("dash")
 		STATES.FALL:
@@ -269,7 +290,8 @@ func check_feet() -> void:
 
 func _physics_process(delta) -> void:
 	#checks
-	check_feet()	
+	check_feet()
+	update_wall_direction()
 	get_state_from_input()
 	apply_gravity()
 	get_physics_from_state()
@@ -290,6 +312,8 @@ func _process(_delta) -> void:
 			$state_label.text = "JUMP"
 		STATES.DJUMP:
 			$state_label.text = "DJUMP"
+		STATES.WSLIDE:
+			$state_label.text = "WSLIDE"
 		STATES.WJUMP:
 			$state_label.text = "WJUMP"
 		STATES.DASH:
@@ -304,6 +328,13 @@ func _process(_delta) -> void:
 			$state_label.text = "PUNCH"
 		STATES.AERIAL:
 			$state_label.text = "AERIAL"
+
+func wjump() -> void:
+	can_wjump = false
+	jumps = min(jumps, 1) # can only djump after a wjump
+	var wjump_vel = WJUMP_VEL
+	wjump_vel.x *= -wall_direction
+	vel = wjump_vel
 
 func punch() -> void:
 	if sprite.flip_h:
@@ -356,11 +387,20 @@ func hurt_effect() -> void:
 #	Engine.set_iterations_per_second(60)
 #	Engine.set_physics_jitter_fix(0.5)
 
+func update_wall_direction() -> void:
+	var is_near_wall_left = check_wall(left_raycasts)
+	var is_near_wall_right = check_wall(right_raycasts)
+	if is_near_wall_left && is_near_wall_right:
+		wall_direction = int(right_pressed) - int(left_pressed)
+	else:
+		wall_direction = int(is_near_wall_right) - int(is_near_wall_left)
+
 func check_wall(wall_raycasts):
 	for raycast in wall_raycasts.get_children():
 		if raycast.is_colliding():
 			var dot = acos(Vector2.UP.dot(raycast.get_collision_normal()))
-			if dot > PI * 0.45:
+			if dot > PI * 0.35 && dot < PI * 0.55:
+				can_wjump = true
 				return true
 	return false
 

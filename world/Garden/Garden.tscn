@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://world/Garden/Assets/Garden_tilemap.tres" type="TileSet" id=1]
 [ext_resource path="res://world/Garden/Assets/Gazebo_Export-3.png" type="Texture" id=2]
@@ -8,6 +8,9 @@
 [ext_resource path="res://characters/sprites/Dahlia/dahlia_sitting.png" type="Texture" id=6]
 [ext_resource path="res://world/Garden/Dahlia_Sitting.gd" type="Script" id=7]
 [ext_resource path="res://world/Garden/Assets/Dahlia_home.png" type="Texture" id=8]
+[ext_resource path="res://world/Garden/Garden_house.tscn" type="PackedScene" id=9]
+[ext_resource path="res://world/Garden/Assets/Characters/Bob son.png" type="Texture" id=10]
+[ext_resource path="res://world/Garden/Assets/Characters/Bob.png" type="Texture" id=11]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -32,28 +35,54 @@ extents = Vector2( 212.755, 13.5061 )
 extents = Vector2( 168.529, 54.9041 )
 
 [sub_resource type="SegmentShape2D" id=6]
-b = Vector2( 134.716, 0.0456543 )
+b = Vector2( 9.98346, -0.100037 )
 
 [sub_resource type="SegmentShape2D" id=7]
-b = Vector2( -132.068, -0.0456543 )
+b = Vector2( -11.7948, 0.0296631 )
 
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 178.672, 1.38226 )
 
 [sub_resource type="RectangleShape2D" id=9]
-extents = Vector2( 405.609, 10 )
+extents = Vector2( 673.169, 10 )
 
 [sub_resource type="RectangleShape2D" id=10]
-extents = Vector2( 284.966, 10 )
+extents = Vector2( 477.708, 10 )
 
 [sub_resource type="RectangleShape2D" id=11]
-extents = Vector2( 260.362, 10 )
+extents = Vector2( 433.247, 10 )
 
 [sub_resource type="RectangleShape2D" id=12]
-extents = Vector2( 225.439, 10 )
+extents = Vector2( 374.271, 10 )
 
 [sub_resource type="RectangleShape2D" id=13]
-extents = Vector2( 168.292, 10 )
+extents = Vector2( 273.277, 10 )
+
+[sub_resource type="AtlasTexture" id=14]
+flags = 4
+atlas = ExtResource( 11 )
+region = Rect2( 0, 0, 450, 577 )
+
+[sub_resource type="SpriteFrames" id=15]
+animations = [ {
+"frames": [ SubResource( 14 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=16]
+flags = 4
+atlas = ExtResource( 10 )
+region = Rect2( 0, 0, 450, 450 )
+
+[sub_resource type="SpriteFrames" id=17]
+animations = [ {
+"frames": [ SubResource( 16 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [node name="Garden" type="Node"]
 
@@ -72,6 +101,7 @@ position = Vector2( 15.1021, -5.66309 )
 shape = SubResource( 3 )
 
 [node name="Gazebo" type="StaticBody2D" parent="."]
+collision_layer = 8
 
 [node name="In front" type="Sprite" parent="Gazebo"]
 position = Vector2( 960, 504 )
@@ -107,14 +137,14 @@ shape = SubResource( 5 )
 one_way_collision = true
 
 [node name="Left Bar" type="CollisionShape2D" parent="Gazebo"]
-position = Vector2( 806.394, 384.6 )
+position = Vector2( 806.394, 529.899 )
 rotation = 1.5708
 z_index = 1
 shape = SubResource( 6 )
 one_way_collision = true
 
 [node name="Right Bar" type="CollisionShape2D" parent="Gazebo"]
-position = Vector2( 1117.35, 384.6 )
+position = Vector2( 1117.35, 529.899 )
 rotation = 4.71239
 z_index = 1
 shape = SubResource( 7 )
@@ -131,6 +161,9 @@ shape = SubResource( 8 )
 one_way_collision = true
 
 [node name="D_House" type="StaticBody2D" parent="."]
+position = Vector2( 1052.88, 278.783 )
+scale = Vector2( 0.6, 0.6 )
+collision_layer = 8
 
 [node name="sprite" type="Sprite" parent="D_House"]
 position = Vector2( 2810.82, -134.848 )
@@ -138,27 +171,27 @@ z_index = -1
 texture = ExtResource( 8 )
 
 [node name="rect1" type="CollisionShape2D" parent="D_House"]
-position = Vector2( 2876.88, 546.061 )
+position = Vector2( 2957.52, 442.747 )
 shape = SubResource( 9 )
 one_way_collision = true
 
 [node name="rect2" type="CollisionShape2D" parent="D_House"]
-position = Vector2( 2549.88, 408.751 )
+position = Vector2( 2414.67, 213.041 )
 shape = SubResource( 10 )
 one_way_collision = true
 
 [node name="rect3" type="CollisionShape2D" parent="D_House"]
-position = Vector2( 2816.56, 176.197 )
+position = Vector2( 2854.35, -178.263 )
 shape = SubResource( 11 )
 one_way_collision = true
 
 [node name="rect4" type="CollisionShape2D" parent="D_House"]
-position = Vector2( 2605.44, 34.1245 )
+position = Vector2( 2501.29, -414.407 )
 shape = SubResource( 12 )
 one_way_collision = true
 
 [node name="rect5" type="CollisionShape2D" parent="D_House"]
-position = Vector2( 2770.53, -194.461 )
+position = Vector2( 2767.1, -800.454 )
 shape = SubResource( 13 )
 one_way_collision = true
 
@@ -181,10 +214,10 @@ follow_viewport_scale = 0.5
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer2"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -3723.94
-margin_top = -5900.97
-margin_right = 17021.1
-margin_bottom = 4664.03
+margin_left = -2551.94
+margin_top = -5848.97
+margin_right = 18193.1
+margin_bottom = 4716.03
 color = Color( 0.419608, 0.572549, 0.737255, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -194,9 +227,53 @@ __meta__ = {
 visible = false
 color = Color( 0.721569, 0.721569, 0.721569, 1 )
 
+[node name="BG Houses" type="CanvasLayer" parent="."]
+layer = -1
+follow_viewport_enable = true
+follow_viewport_scale = 0.97
+
+[node name="CanvasModulate3" type="CanvasModulate" parent="BG Houses"]
+visible = false
+color = Color( 0.721569, 0.721569, 0.721569, 1 )
+
+[node name="House3" parent="BG Houses" instance=ExtResource( 9 )]
+position = Vector2( 3150.44, 555.502 )
+
+[node name="CollisionShape2D" parent="BG Houses/House3" index="1"]
+disabled = true
+
+[node name="House4" parent="BG Houses" instance=ExtResource( 9 )]
+position = Vector2( 3962.94, 555.502 )
+
+[node name="CollisionShape2D" parent="BG Houses/House4" index="1"]
+disabled = true
+
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
 color = Color( 0.686275, 0.686275, 0.686275, 1 )
 
+[node name="House" parent="." instance=ExtResource( 9 )]
+position = Vector2( 3588.76, 528.775 )
+z_index = -1
+collision_layer = 8
+
+[node name="House2" parent="." instance=ExtResource( 9 )]
+position = Vector2( 4233.05, 528.775 )
+z_index = -1
+collision_layer = 8
+
+[node name="Bob" type="AnimatedSprite" parent="."]
+position = Vector2( 4879.19, 556.27 )
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 15 )
+
+[node name="Bob son" type="AnimatedSprite" parent="."]
+position = Vector2( 4691.89, 590.318 )
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 17 )
+
 [connection signal="area_entered" from="Dahlia Sitting/dialogue_range" to="Dahlia Sitting" method="_on_dialogue_range_area_entered"]
 [connection signal="area_exited" from="Dahlia Sitting/dialogue_range" to="Dahlia Sitting" method="_on_dialogue_range_area_exited"]
+
+[editable path="BG Houses/House3"]
+[editable path="BG Houses/House4"]

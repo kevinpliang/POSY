@@ -112,6 +112,13 @@ b={
  ]
 }
 
+[layer_names]
+
+2d_render/layer_1="walls"
+2d_render/layer_2="player"
+2d_render/layer_3="enemies"
+2d_render/layer_4="cant_slide_walls"
+
 [physics]
 
 common/enable_pause_aware_picking=true
