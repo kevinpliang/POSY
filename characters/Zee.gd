@@ -65,7 +65,7 @@ var can_go_from = {
 	STATES.JUMP  : [STATES.DJUMP, STATES.WSLIDE, STATES.FALL, STATES.FFALL, STATES.AERIAL, STATES.DASH],
 	STATES.DJUMP : [STATES.IDLE, STATES.WSLIDE, STATES.AERIAL, STATES.FFALL, STATES.DASH],
 	STATES.WSLIDE: [STATES.IDLE, STATES.FALL, STATES.WJUMP],
-	STATES.WJUMP : [STATES.DJUMP, STATES.WSLIDE, STATES.FALL, STATES.AERIAL],
+	STATES.WJUMP : [STATES.DJUMP, STATES.WSLIDE, STATES.DASH, STATES.FALL, STATES.AERIAL],
 	STATES.DASH  : [],
 	STATES.FALL  : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.WSLIDE, STATES.FFALL, STATES.AERIAL, STATES.DASH],
 	STATES.FFALL : [STATES.IDLE, STATES.JUMP, STATES.DJUMP, STATES.WSLIDE, STATES.AERIAL, STATES.DASH],
@@ -74,6 +74,7 @@ var can_go_from = {
 	STATES.AERIAL: [],
 }
 var uncontrollable_states = [STATES.WSLIDE, STATES.WJUMP, STATES.DASH, STATES.HURT]
+var dont_flip_sprite_states = [STATES.DASH, STATES.WSLIDE, STATES.AERIAL]
 
 func _ready() -> void:
 	Global.player = self
@@ -196,7 +197,11 @@ func get_physics_from_state() -> void:
 				wjump()
 		STATES.DASH:
 			if can_dash:
-				if sprite.flip_h:
+				if left_pressed:
+					dash(-1)
+				elif right_pressed:
+					dash(1)
+				elif sprite.flip_h:
 					dash(-1)
 				else:
 					dash(1)
@@ -230,10 +235,15 @@ func apply_gravity() -> void:
 
 func get_sprite_from_state() -> void:
 	# flip sprite depending on which way facing
-	if current_state != STATES.DASH:
+	if !(current_state in dont_flip_sprite_states):
 		if vel.x > 0:
 			sprite.flip_h = false
 		elif vel.x < 0:
+			sprite.flip_h = true
+	elif current_state == STATES.WSLIDE:
+		if wall_direction == 1:
+			sprite.flip_h = false
+		elif wall_direction == -1:
 			sprite.flip_h = true
 
 	match current_state:
@@ -362,6 +372,8 @@ func aerial() -> void:
 
 func dash(dir) -> void:
 	can_dash = false
+	if (dir == -1): sprite.flip_h = true
+	else: sprite.flip_h = false
 	vel.y = 0
 	vel.x += dir * DASH_ACCEL
 	$dash_timer.start()

@@ -423,6 +423,9 @@ one_shot = true
 [node name="punch_timer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
+__meta__ = {
+"_editor_description_": "time it takes to reset to idle after punch"
+}
 
 [node name="aerial_timer" type="Timer" parent="."]
 wait_time = 0.3

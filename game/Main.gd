@@ -27,4 +27,4 @@ func _ready():
 	Global.instance_node_at(Rat, Vector2(2000, 500), self)
 
 func _process(_delta):
-	pass
+	$UI/Performance.set_text( String(Performance.get_monitor(Performance.TIME_FPS))+"FPS")
