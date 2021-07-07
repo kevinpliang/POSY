@@ -87,6 +87,7 @@ animations = [ {
 [node name="Garden" type="Node"]
 
 [node name="Dahlia Sitting" type="AnimatedSprite" parent="."]
+visible = false
 position = Vector2( 956.618, 563.722 )
 scale = Vector2( 0.6, 0.6 )
 z_index = -2
@@ -101,6 +102,7 @@ position = Vector2( 15.1021, -5.66309 )
 shape = SubResource( 3 )
 
 [node name="Gazebo" type="StaticBody2D" parent="."]
+visible = false
 collision_layer = 8
 
 [node name="In front" type="Sprite" parent="Gazebo"]
@@ -161,6 +163,7 @@ shape = SubResource( 8 )
 one_way_collision = true
 
 [node name="D_House" type="StaticBody2D" parent="."]
+visible = false
 position = Vector2( 1052.88, 278.783 )
 scale = Vector2( 0.6, 0.6 )
 collision_layer = 8
@@ -227,53 +230,33 @@ __meta__ = {
 visible = false
 color = Color( 0.721569, 0.721569, 0.721569, 1 )
 
-[node name="BG Houses" type="CanvasLayer" parent="."]
-layer = -1
-follow_viewport_enable = true
-follow_viewport_scale = 0.97
-
-[node name="CanvasModulate3" type="CanvasModulate" parent="BG Houses"]
-visible = false
-color = Color( 0.721569, 0.721569, 0.721569, 1 )
-
-[node name="House3" parent="BG Houses" instance=ExtResource( 9 )]
-position = Vector2( 3150.44, 555.502 )
-
-[node name="CollisionShape2D" parent="BG Houses/House3" index="1"]
-disabled = true
-
-[node name="House4" parent="BG Houses" instance=ExtResource( 9 )]
-position = Vector2( 3962.94, 555.502 )
-
-[node name="CollisionShape2D" parent="BG Houses/House4" index="1"]
-disabled = true
-
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
 color = Color( 0.686275, 0.686275, 0.686275, 1 )
 
 [node name="House" parent="." instance=ExtResource( 9 )]
+visible = false
 position = Vector2( 3588.76, 528.775 )
 z_index = -1
 collision_layer = 8
 
 [node name="House2" parent="." instance=ExtResource( 9 )]
+visible = false
 position = Vector2( 4233.05, 528.775 )
 z_index = -1
 collision_layer = 8
 
 [node name="Bob" type="AnimatedSprite" parent="."]
+visible = false
 position = Vector2( 4879.19, 556.27 )
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 15 )
 
 [node name="Bob son" type="AnimatedSprite" parent="."]
+visible = false
 position = Vector2( 4691.89, 590.318 )
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 17 )
 
 [connection signal="area_entered" from="Dahlia Sitting/dialogue_range" to="Dahlia Sitting" method="_on_dialogue_range_area_entered"]
 [connection signal="area_exited" from="Dahlia Sitting/dialogue_range" to="Dahlia Sitting" method="_on_dialogue_range_area_exited"]
-
-[editable path="BG Houses/House3"]
-[editable path="BG Houses/House4"]
