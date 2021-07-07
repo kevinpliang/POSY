@@ -302,6 +302,8 @@ func _physics_process(delta) -> void:
 	#checks
 	check_feet()
 	update_wall_direction()
+	
+	# state stuff
 	get_state_from_input()
 	apply_gravity()
 	get_physics_from_state()

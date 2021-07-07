@@ -2,7 +2,8 @@ extends Node
 
 onready var Zee = preload("res://characters/Zee.tscn")
 onready var Test_stage = preload("res://world/Test_stage.tscn")
-onready var Nobel = preload("res://world/Garden/Garden.tscn")
+onready var Greenscreen = preload("res://world/Greenscreen.tscn")
+onready var Garden = preload("res://world/Garden/Garden.tscn")
 
 onready var HealthBar = preload("res://objects/health-bar/Healthbar.tscn")
 
@@ -16,15 +17,21 @@ func _ready():
 	Global.main = self;
 	# OS.window_maximized = true
 	
-	# Global.instance_node(Test_stage, self);
-	Global.instance_node(Nobel, self);
+	# Global.instance_node(Greenscreen, self);
+	Global.instance_node(Garden, self);
 	
-	Global.instance_node_at(Zee, Vector2(960,100),self);
+	Global.instance_node_at(Zee, Vector2(500,500),self);
 	Global.instance_node_at(HealthBar, Vector2(150, 150), $UI);
 	Global.instance_node_at(Dialogue, Vector2(0, 0), $UI);
 	# Global.instance_node_at(Bat, Vector2(500, 300), self)
-	Global.instance_node_at(Rat, Vector2(500, 500), self)
-	Global.instance_node_at(Rat, Vector2(2000, 500), self)
+	# Global.instance_node_at(Rat, Vector2(0, 500), self)
+	# Global.instance_node_at(Rat, Vector2(2000, 500), self)
+
+func _input(event):
+	pass
+#	if (event.is_action_pressed("ui_select")):
+#		var rat = Global.instance_node_at(Rat, Vector2(554, 824), self)
+#		rat.visible = false
 
 func _process(_delta):
 	$UI/Performance.set_text( String(Performance.get_monitor(Performance.TIME_FPS))+"FPS")
