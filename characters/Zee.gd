@@ -42,6 +42,7 @@ var left_pressed
 var right_pressed
 var horizontal_pressed
 var wall_direction = 0
+var can_move = true
 var can_dash
 var can_wjump
 var just_landed = false
@@ -56,7 +57,7 @@ var aerial_cooldown = false
 # ratchet state machine 2.0
 var current_state;
 var prev_state;
-enum STATES { IDLE, WALK, HURT, JUMP, DJUMP, WSLIDE, WJUMP, DASH, FALL, FFALL, CROUCH, PUNCH, AERIAL };
+enum STATES { IDLE, WALK, HURT, JUMP, DJUMP, WSLIDE, WJUMP, DASH, FALL, FFALL, CROUCH, PUNCH, AERIAL, TALK };
 var can_go_from = {
 	# from.........to.................................................................................................
 	STATES.IDLE  : [STATES.WALK, STATES.JUMP, STATES.DJUMP, STATES.FALL, STATES.CROUCH, STATES.PUNCH],
@@ -72,6 +73,7 @@ var can_go_from = {
 	STATES.CROUCH: [STATES.IDLE, STATES.WALK, STATES.JUMP],
 	STATES.PUNCH : [],
 	STATES.AERIAL: [],
+	STATES.TALK: [STATES.IDLE],
 }
 var uncontrollable_states = [STATES.WSLIDE, STATES.WJUMP, STATES.DASH, STATES.HURT]
 var dont_flip_sprite_states = [STATES.DASH, STATES.WSLIDE, STATES.AERIAL]
@@ -149,6 +151,11 @@ func get_state_from_input():
 		if can_dash and STATES.DASH in can_go_from[current_state]:
 			prev_state = current_state
 			current_state = STATES.DASH
+			
+	# OVERRIDES
+	if (!can_move):
+		prev_state = current_state
+		current_state = STATES.TALK
 
 func get_physics_from_state() -> void:
 	horizontal_pressed = int(right_pressed) - int(left_pressed)
@@ -219,6 +226,8 @@ func get_physics_from_state() -> void:
 		STATES.AERIAL:
 			if !aerial_cooldown:
 				aerial()
+		STATES.TALK:
+			vel.x = 0
 
 	if is_on_floor():
 		jumps = MAX_JUMPS
@@ -273,6 +282,8 @@ func get_sprite_from_state() -> void:
 			sprite.play("punch")
 		STATES.AERIAL:
 			sprite.play("aerial")
+		STATES.TALK:
+			sprite.play("idle")
 
 func get_hitbox_from_state() -> void:
 	match current_state:
@@ -340,6 +351,8 @@ func _process(_delta) -> void:
 			$state_label.text = "PUNCH"
 		STATES.AERIAL:
 			$state_label.text = "AERIAL"
+		STATES.TALK:
+			$state_label.text = "TALK"
 
 func wjump() -> void:
 	can_wjump = false

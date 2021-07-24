@@ -50,8 +50,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://Global.gd"
 DialogicSingleton="*res://addons/dialogic/Other/DialogicSingleton.gd"
+Global="*res://game/Global.gd"
 
 [display]
 

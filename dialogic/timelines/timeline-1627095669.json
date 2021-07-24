@@ -1,0 +1,39 @@
+{
+	"events": [
+		{
+			"character": "character-1627086312.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "A human?"
+		},
+		{
+			"character": "character-1627086312.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Whats your name?"
+		},
+		{
+			"character": "character-1627086312.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "You don’t see many humans around here anymore, Zee."
+		},
+		{
+			"character": "character-1627086312.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Boy are you lucky. If a flower had found you before I did, they would have killed you right here."
+		},
+		{
+			"character": "character-1627086312.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "I probably should have, to be honest. But I’m too nice for that. Here, follow me."
+		}
+	],
+	"metadata": {
+		"dialogic-version": "1.2.4",
+		"file": "timeline-1627095669.json",
+		"name": "Garden1"
+	}
+}
