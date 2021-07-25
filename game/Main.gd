@@ -2,7 +2,6 @@ extends Node
 
 onready var Zee = preload("res://characters/Zee.tscn")
 onready var Test_stage = preload("res://world/Test_stage.tscn")
-onready var Greenscreen = preload("res://world/Greenscreen.tscn")
 onready var Garden = preload("res://world/Garden/Garden.tscn")
 
 onready var HealthBar = preload("res://objects/health-bar/Healthbar.tscn")
@@ -27,7 +26,7 @@ func _ready():
 	# Global.instance_node_at(Rat, Vector2(0, 500), self)
 	# Global.instance_node_at(Rat, Vector2(2000, 500), self)
 
-func _input(event):
+func _input(_event):
 	pass
 #	if (event.is_action_pressed("ui_select")):
 #		var rat = Global.instance_node_at(Rat, Vector2(554, 824), self)

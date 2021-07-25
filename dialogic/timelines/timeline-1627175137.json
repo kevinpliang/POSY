@@ -1,0 +1,19 @@
+{
+	"events": [
+		{
+			"event_id": "dialogic_024",
+			"set_theme": "theme-1627175154.cfg"
+		},
+		{
+			"character": "character-1627175145.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "A human?\nWhat's your name?"
+		}
+	],
+	"metadata": {
+		"dialogic-version": "1.2.4",
+		"file": "timeline-1627175137.json",
+		"name": "Garden1"
+	}
+}

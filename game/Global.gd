@@ -8,7 +8,7 @@ var player = null
 
 
 # Narrative state variables
-
+var playername = "Zee"
 
 func _ready():
 	pass

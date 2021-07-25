@@ -1,7 +1,36 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://world/Garden/Assets/Garden_tilemap.tres" type="TileSet" id=1]
 [ext_resource path="res://world/Garden/Garden.gd" type="Script" id=2]
+[ext_resource path="res://world/Garden/Assets/Tutorial/Move.png" type="Texture" id=3]
+[ext_resource path="res://world/Garden/Assets/Tutorial/Jump.png" type="Texture" id=4]
+[ext_resource path="res://world/Garden/Assets/Tutorial/DoubleJump.png" type="Texture" id=5]
+
+[sub_resource type="Animation" id=1]
+resource_name = "enter"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.435294 ) ]
+}
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="DynamicFontData" id=4]
+font_path = "res://resources/Fonts/STIX_Two_Math/STIXTwoMath-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=5]
+size = 48
+font_data = SubResource( 4 )
 
 [node name="Garden" type="Node"]
 script = ExtResource( 2 )
@@ -17,10 +46,6 @@ tile_data = PoolIntArray( 196646, 20, 0, 196647, 19, 0, 196648, 19, 0, 196649, 1
 [node name="CanvasModulate2" type="CanvasModulate" parent="CanvasLayer"]
 color = Color( 0.811765, 0.811765, 0.811765, 1 )
 
-[node name="Tutorial" type="Node2D" parent="CanvasLayer"]
-
-[node name="WASD" type="Sprite" parent="CanvasLayer/Tutorial"]
-
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 layer = -1
 follow_viewport_enable = true
@@ -30,10 +55,10 @@ follow_viewport_scale = 0.5
 anchor_top = -0.00138798
 anchor_right = 1.0
 anchor_bottom = 0.998612
-margin_left = -2551.94
-margin_top = -5848.97
-margin_right = 18193.1
-margin_bottom = 4716.03
+margin_left = -1790.8
+margin_top = -5466.29
+margin_right = 18954.2
+margin_bottom = 5098.71
 color = Color( 0.419608, 0.572549, 0.737255, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -42,3 +67,44 @@ __meta__ = {
 [node name="CanvasModulate3" type="CanvasModulate" parent="CanvasLayer2"]
 visible = false
 color = Color( 0.721569, 0.721569, 0.721569, 1 )
+
+[node name="Tutorial" type="Node2D" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+z_index = -1
+
+[node name="Move" type="Sprite" parent="Tutorial"]
+position = Vector2( 991.744, 458.817 )
+texture = ExtResource( 3 )
+
+[node name="Jump" type="Sprite" parent="Tutorial"]
+position = Vector2( 1742, 468 )
+texture = ExtResource( 4 )
+
+[node name="DJump" type="Sprite" parent="Tutorial"]
+position = Vector2( 2204, 314 )
+texture = ExtResource( 5 )
+
+[node name="Enter" type="AnimationPlayer" parent="Tutorial"]
+anims/enter = SubResource( 1 )
+
+[node name="NameEntry" type="LineEdit" parent="."]
+visible = false
+margin_left = 338.991
+margin_top = 356.792
+margin_right = 738.991
+margin_bottom = 405.792
+grow_horizontal = 2
+grow_vertical = 2
+custom_styles/focus = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
+custom_fonts/font = SubResource( 5 )
+align = 1
+max_length = 20
+expand_to_text_length = true
+placeholder_text = "Enter your name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="text_entered" from="NameEntry" to="." method="_on_NameEntry_text_entered"]
