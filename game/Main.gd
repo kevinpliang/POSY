@@ -1,13 +1,10 @@
 extends Node
 
+# Preloads
 onready var Zee = preload("res://characters/Zee.tscn")
-onready var Test_stage = preload("res://world/Test_stage.tscn")
-
 onready var HealthBar = preload("res://objects/health-bar/Healthbar.tscn")
-
-onready var Bat = preload("res://characters/enemies/Love_bat.tscn")
-onready var Rat = preload("res://characters/enemies/Rat.tscn")
-
+onready var SaveIcon = preload("res://objects/save-notif/SaveIcon.tscn")
+onready var saveIconInstance
 
 # Worlds
 onready var Garden = preload("res://world/Garden/Garden.tscn")
@@ -29,7 +26,6 @@ func startGame():
 		movePlayer(null, sceneOf[Global.playerlocation])
 	else:
 		movePlayer(null, sceneOf[Global.LOCATIONS.GARDEN])
-		Global.saveGame()
 		
 func movePlayer(from, to):
 	if (Global.player):
@@ -62,3 +58,6 @@ func toggleOptions():
 func toggleQuit():
 	$Pause/Control.visible = !$Pause/Control.visible
 	$Pause/QuitControl.visible = !$Pause/QuitControl.visible
+	
+func showSave():
+	saveIconInstance = Global.instance_node(SaveIcon, $UI)

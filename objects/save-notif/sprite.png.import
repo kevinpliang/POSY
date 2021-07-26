@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Untitled.png-e406ba15403c04e51ffec6e4b40db9d4.stex"
+path="res://.import/sprite.png-92c7468e21a29091adb6f645a03a0516.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/Untitled.png"
-dest_files=[ "res://.import/Untitled.png-e406ba15403c04e51ffec6e4b40db9d4.stex" ]
+source_file="res://objects/save-notif/sprite.png"
+dest_files=[ "res://.import/sprite.png-92c7468e21a29091adb6f645a03a0516.stex" ]
 
 [params]
 

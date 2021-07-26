@@ -19,7 +19,6 @@ func _ready():
 		curr_state = STATES.CS0
 		dahliaInstance = Global.instance_node_at(Dahlia, Vector2(700,400), self)
 		dahliaInstance.vel = Vector2(-dahliaInstance.WALK_SPEED, 0)
-		(Global.events[Global.LOCATIONS.GARDEN])[0] = false
 	else:
 		curr_state = STATES.IDLE
 
@@ -80,3 +79,6 @@ func cutscene2end():
 	curr_state = STATES.IDLE
 	$Tutorial.visible = true
 	$Tutorial/Enter.play("enter")
+	(Global.events[Global.LOCATIONS.GARDEN])[0] = false
+	Global.saveGame()
+	

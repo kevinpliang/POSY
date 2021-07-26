@@ -49,6 +49,7 @@ func saveGame() -> bool:
 	var error = file.open(savepath, File.WRITE)
 	#var error = file.open_encrypted_with_pass(savepath, File.WRITE, "password")
 	if error == OK:
+		Global.main.showSave()
 		file.store_var(saveData)
 		file.close()
 		return true
@@ -67,7 +68,7 @@ func loadGame() -> bool:
 			playername = saveData["playername"]
 			playerlocation = saveData["location"]	
 			events = saveData["events"]
-			
+
 			file.close()
 			return true
 	return false
