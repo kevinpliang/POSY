@@ -46,12 +46,14 @@ _global_script_class_icons={
 
 config/name="posy"
 run/main_scene="res://game/Main.tscn"
+config/use_custom_user_dir=true
 config/icon="res://icon.png"
 
 [autoload]
 
 DialogicSingleton="*res://addons/dialogic/Other/DialogicSingleton.gd"
 Global="*res://game/Global.gd"
+Settings="*res://game/Settings.gd"
 
 [display]
 

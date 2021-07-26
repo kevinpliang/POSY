@@ -1,7 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://objects/health-bar/sprites/petal.png" type="Texture" id=1]
-[ext_resource path="res://objects/health-bar/Petal.gd" type="Script" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -16,8 +15,20 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="Animation" id=3]
-resource_name = "fall"
+[sub_resource type="GDScript" id=3]
+script/source = "extends AnimatedSprite
+
+onready var animations = $AnimationPlayer
+
+func _ready():
+	pass
+	
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if anim_name == \"fall\":
+		queue_free()
+"
+
+[sub_resource type="Animation" id=4]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
@@ -36,9 +47,9 @@ tracks/0/keys = {
 z_index = -1
 frames = SubResource( 2 )
 offset = Vector2( 7.946, 5.297 )
-script = ExtResource( 2 )
+script = SubResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/fall = SubResource( 3 )
+anims/fall = SubResource( 4 )
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

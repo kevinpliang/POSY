@@ -10,10 +10,18 @@ var curr_state
 # makes it so accepting name prompt doesn't auto fill "p" in text box
 var firstP = false
 
+# yep
+var spawn = Vector2(500,500)
+
 func _ready():
-	curr_state = STATES.CS0
-	dahliaInstance = Global.instance_node_at(Dahlia, Vector2(700,400), self)
-	dahliaInstance.vel = Vector2(-dahliaInstance.WALK_SPEED, 0)
+	Global.playerlocation = Global.LOCATIONS.GARDEN
+	if ((Global.events[Global.LOCATIONS.GARDEN])[0]):
+		curr_state = STATES.CS0
+		dahliaInstance = Global.instance_node_at(Dahlia, Vector2(700,400), self)
+		dahliaInstance.vel = Vector2(-dahliaInstance.WALK_SPEED, 0)
+		(Global.events[Global.LOCATIONS.GARDEN])[0] = false
+	else:
+		curr_state = STATES.IDLE
 
 func _process(delta):
 	if (curr_state != STATES.IDLE):

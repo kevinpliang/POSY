@@ -1,10 +1,18 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://game/Main.gd" type="Script" id=1]
 [ext_resource path="res://resources/Fonts/Arial/arial.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://resources/Fonts/Merriweather/MerriweatherRegular.tres" type="DynamicFont" id=3]
 [ext_resource path="res://resources/Fonts/Merriweather/MerriweatherBold.tres" type="DynamicFont" id=4]
 [ext_resource path="res://resources/Fonts/Merriweather/MerriweatherItalic.tres" type="DynamicFont" id=5]
+[ext_resource path="res://game/UI/Resume.gd" type="Script" id=6]
+[ext_resource path="res://game/UI/Options.gd" type="Script" id=7]
+[ext_resource path="res://game/UI/Quit.gd" type="Script" id=8]
+[ext_resource path="res://game/UI/PauseMenu.gd" type="Script" id=9]
+[ext_resource path="res://game/UI/QuitYes.gd" type="Script" id=10]
+[ext_resource path="res://game/UI/QuitNo.gd" type="Script" id=11]
+[ext_resource path="res://game/UI/QuitMenu.gd" type="Script" id=12]
+[ext_resource path="res://game/UI/OptionsMenu.gd" type="Script" id=13]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -73,16 +81,18 @@ __meta__ = {
 layer = 15
 
 [node name="Control" type="Control" parent="Pause"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect" type="ColorRect" parent="Pause/Control"]
+[node name="ScreenTint" type="ColorRect" parent="Pause/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.588235 )
+color = Color( 0, 0, 0, 0.705882 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -117,13 +127,15 @@ margin_left = 20.0
 margin_top = 20.0
 margin_right = 380.0
 margin_bottom = 200.0
+alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PAUSED" type="Label" parent="Pause/Control/Panel/MarginContainer/VBoxContainer"]
+margin_top = 2.0
 margin_right = 360.0
-margin_bottom = 41.0
+margin_bottom = 43.0
 custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Paused"
@@ -137,9 +149,9 @@ __meta__ = {
 
 [node name="Resume" type="Button" parent="Pause/Control/Panel/MarginContainer/VBoxContainer"]
 modulate = Color( 1, 1, 1, 0.627451 )
-margin_top = 45.0
+margin_top = 47.0
 margin_right = 360.0
-margin_bottom = 86.0
+margin_bottom = 88.0
 focus_neighbour_right = NodePath("../Options")
 focus_neighbour_bottom = NodePath("../Options")
 focus_next = NodePath("../Options")
@@ -149,16 +161,18 @@ custom_styles/focus = SubResource( 5 )
 custom_styles/disabled = SubResource( 6 )
 custom_styles/normal = SubResource( 7 )
 custom_fonts/font = ExtResource( 3 )
+shortcut_in_tooltip = false
 text = "Resume"
+script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Options" type="Button" parent="Pause/Control/Panel/MarginContainer/VBoxContainer"]
 modulate = Color( 1, 1, 1, 0.627451 )
-margin_top = 90.0
+margin_top = 92.0
 margin_right = 360.0
-margin_bottom = 131.0
+margin_bottom = 133.0
 focus_neighbour_left = NodePath("../Resume")
 focus_neighbour_top = NodePath("../Resume")
 focus_neighbour_right = NodePath("../Quit")
@@ -172,15 +186,16 @@ custom_styles/disabled = SubResource( 6 )
 custom_styles/normal = SubResource( 7 )
 custom_fonts/font = ExtResource( 3 )
 text = "Options"
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Quit" type="Button" parent="Pause/Control/Panel/MarginContainer/VBoxContainer"]
 modulate = Color( 1, 1, 1, 0.627451 )
-margin_top = 135.0
+margin_top = 137.0
 margin_right = 360.0
-margin_bottom = 176.0
+margin_bottom = 178.0
 focus_neighbour_left = NodePath("../Options")
 focus_neighbour_top = NodePath("../Options")
 focus_previous = NodePath(".")
@@ -191,6 +206,208 @@ custom_styles/disabled = SubResource( 6 )
 custom_styles/normal = SubResource( 7 )
 custom_fonts/font = ExtResource( 3 )
 text = "Quit"
+script = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="QuitControl" type="Control" parent="Pause"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScreenTint" type="ColorRect" parent="Pause/QuitControl"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.705882 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Pause/QuitControl"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -200.0
+margin_top = -110.0
+margin_right = 200.0
+margin_bottom = 110.0
+custom_styles/panel = SubResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="Pause/QuitControl/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Pause/QuitControl/Panel/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 380.0
+margin_bottom = 200.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QUIT" type="Label" parent="Pause/QuitControl/Panel/MarginContainer/VBoxContainer"]
+margin_top = 24.0
+margin_right = 360.0
+margin_bottom = 65.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "QUIT?"
+align = 1
+valign = 1
+autowrap = true
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuitYes" type="Button" parent="Pause/QuitControl/Panel/MarginContainer/VBoxContainer"]
+modulate = Color( 1, 1, 1, 0.627451 )
+margin_top = 69.0
+margin_right = 360.0
+margin_bottom = 110.0
+focus_neighbour_right = NodePath("../QuitNo")
+focus_neighbour_bottom = NodePath("../QuitNo")
+focus_next = NodePath("../QuitNo")
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 4 )
+custom_styles/focus = SubResource( 5 )
+custom_styles/disabled = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+custom_fonts/font = ExtResource( 3 )
+shortcut_in_tooltip = false
+text = "Yes"
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuitNo" type="Button" parent="Pause/QuitControl/Panel/MarginContainer/VBoxContainer"]
+modulate = Color( 1, 1, 1, 0.627451 )
+margin_top = 114.0
+margin_right = 360.0
+margin_bottom = 155.0
+focus_neighbour_left = NodePath("../QuitYes")
+focus_neighbour_top = NodePath("../QuitYes")
+focus_previous = NodePath("../QuitYes")
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 4 )
+custom_styles/focus = SubResource( 5 )
+custom_styles/disabled = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
+custom_fonts/font = ExtResource( 3 )
+text = "No"
+script = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OptionsControl" type="Control" parent="Pause"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScreenTint" type="ColorRect" parent="Pause/OptionsControl"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -3.36353
+margin_right = -3.36353
+color = Color( 0, 0, 0, 0.705882 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Pause/OptionsControl"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -200.0
+margin_top = -110.0
+margin_right = 200.0
+margin_bottom = 110.0
+custom_styles/panel = SubResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="Pause/OptionsControl/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Pause/OptionsControl/Panel/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 380.0
+margin_bottom = 200.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OPTIONS" type="Label" parent="Pause/OptionsControl/Panel/MarginContainer/VBoxContainer"]
+margin_top = 47.0
+margin_right = 360.0
+margin_bottom = 88.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "OPTIONS"
+align = 1
+valign = 1
+autowrap = true
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MasterVolume" type="HBoxContainer" parent="Pause/OptionsControl/Panel/MarginContainer/VBoxContainer"]
+margin_top = 92.0
+margin_right = 360.0
+margin_bottom = 133.0
+
+[node name="Label" type="Label" parent="Pause/OptionsControl/Panel/MarginContainer/VBoxContainer/MasterVolume"]
+margin_right = 239.0
+margin_bottom = 41.0
+custom_fonts/font = ExtResource( 3 )
+text = "Master Volume"
+
+[node name="Slider" type="HSlider" parent="Pause/OptionsControl/Panel/MarginContainer/VBoxContainer/MasterVolume"]
+margin_left = 243.0
+margin_right = 343.0
+margin_bottom = 16.0
+
+[connection signal="visibility_changed" from="Pause/Control/Panel" to="Pause/Control" method="_on_Panel_visibility_changed"]
+[connection signal="pressed" from="Pause/Control/Panel/MarginContainer/VBoxContainer/Resume" to="Pause/Control/Panel/MarginContainer/VBoxContainer/Resume" method="_on_Resume_pressed"]
+[connection signal="pressed" from="Pause/Control/Panel/MarginContainer/VBoxContainer/Options" to="Pause/Control/Panel/MarginContainer/VBoxContainer/Options" method="_on_Options_pressed"]
+[connection signal="pressed" from="Pause/Control/Panel/MarginContainer/VBoxContainer/Quit" to="Pause/Control/Panel/MarginContainer/VBoxContainer/Quit" method="_on_Quit_pressed"]
+[connection signal="visibility_changed" from="Pause/QuitControl/Panel" to="Pause/QuitControl" method="_on_Panel_visibility_changed"]
+[connection signal="pressed" from="Pause/QuitControl/Panel/MarginContainer/VBoxContainer/QuitYes" to="Pause/QuitControl/Panel/MarginContainer/VBoxContainer/QuitYes" method="_on_QuitYes_pressed"]
+[connection signal="pressed" from="Pause/QuitControl/Panel/MarginContainer/VBoxContainer/QuitNo" to="Pause/QuitControl/Panel/MarginContainer/VBoxContainer/QuitNo" method="_on_QuitNo_pressed"]
