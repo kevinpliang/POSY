@@ -17,20 +17,20 @@ func _ready():
 	# OS.window_maximized = true
 	
 	# Global.instance_node(Greenscreen, self);
-	Global.instance_node(Garden, self);
+	Global.instance_node(Garden, $Game);
 	
-	Global.instance_node_at(Zee, Vector2(500,500),self);
+	Global.instance_node_at(Zee, Vector2(500,500),$Game);
 	Global.instance_node_at(HealthBar, Vector2(150, 150), $UI);
 	Global.instance_node_at(Dialogue, Vector2(0, 0), $UI);
 	# Global.instance_node_at(Bat, Vector2(500, 300), self)
 	# Global.instance_node_at(Rat, Vector2(0, 500), self)
 	# Global.instance_node_at(Rat, Vector2(2000, 500), self)
 
-func _input(_event):
-	pass
-#	if (event.is_action_pressed("ui_select")):
-#		var rat = Global.instance_node_at(Rat, Vector2(554, 824), self)
-#		rat.visible = false
+func _input(event):
+	if (event.is_action_pressed("esc")):
+		get_tree().paused = !(get_tree().paused)
+		$Pause/Control.visible = !$Pause/Control.visible
 
 func _process(_delta):
 	$UI/Performance.set_text( String(Performance.get_monitor(Performance.TIME_FPS))+"FPS")
+	
