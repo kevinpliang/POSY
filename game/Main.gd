@@ -15,13 +15,14 @@ onready var sceneOf = {
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.main = self
-	startGame()
+	#startGame()
 
 func _process(_delta):
 	$UI/Performance.set_text( String(Performance.get_monitor(Performance.TIME_FPS))+"FPS")
 
 # Game State Stuff
 func startGame():
+	toggleMainMenu()
 	if Global.loadGame():
 		movePlayer(null, sceneOf[Global.playerlocation])
 	else:
@@ -46,6 +47,9 @@ func _input(event):
 			toggleQuit()
 		else:
 			togglePause()
+
+func toggleMainMenu():
+	$MainMenu/Control.visible = !$MainMenu/Control.visible
 
 func togglePause():
 	get_tree().paused = !(get_tree().paused)

@@ -47,7 +47,8 @@ _global_script_class_icons={
 config/name="posy"
 run/main_scene="res://game/Main.tscn"
 config/use_custom_user_dir=true
-boot_splash/image="res://resources/img/splash_screen.png"
+boot_splash/image="res://resources/img/splash_screen_small.png"
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
 
 [autoload]

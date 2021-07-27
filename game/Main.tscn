@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://game/Main.gd" type="Script" id=1]
 [ext_resource path="res://resources/Fonts/Arial/arial.ttf" type="DynamicFontData" id=2]
@@ -13,6 +13,11 @@
 [ext_resource path="res://game/UI/QuitNo.gd" type="Script" id=11]
 [ext_resource path="res://game/UI/QuitMenu.gd" type="Script" id=12]
 [ext_resource path="res://game/UI/OptionsMenu.gd" type="Script" id=13]
+[ext_resource path="res://resources/img/splash_screen_small.png" type="Texture" id=14]
+[ext_resource path="res://game/UI/MainMenu/Options.gd" type="Script" id=15]
+[ext_resource path="res://game/UI/MainMenu/Start.gd" type="Script" id=16]
+[ext_resource path="res://game/UI/MainMenu/Quit.gd" type="Script" id=17]
+[ext_resource path="res://game/UI/MainMenu/MainMenu.gd" type="Script" id=18]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
@@ -29,6 +34,38 @@ font_data = ExtResource( 2 )
 [sub_resource type="StyleBoxEmpty" id=6]
 
 [sub_resource type="StyleBoxEmpty" id=7]
+
+[sub_resource type="StyleBoxEmpty" id=8]
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+[sub_resource type="StyleBoxEmpty" id=10]
+
+[sub_resource type="StyleBoxEmpty" id=11]
+
+[sub_resource type="StyleBoxEmpty" id=12]
+
+[sub_resource type="StyleBoxEmpty" id=13]
+
+[sub_resource type="StyleBoxEmpty" id=14]
+
+[sub_resource type="StyleBoxEmpty" id=15]
+
+[sub_resource type="StyleBoxEmpty" id=16]
+
+[sub_resource type="StyleBoxEmpty" id=17]
+
+[sub_resource type="StyleBoxEmpty" id=18]
+
+[sub_resource type="StyleBoxEmpty" id=19]
+
+[sub_resource type="StyleBoxEmpty" id=20]
+
+[sub_resource type="StyleBoxEmpty" id=21]
+
+[sub_resource type="StyleBoxEmpty" id=22]
+
+[sub_resource type="StyleBoxEmpty" id=23]
 
 [node name="Main" type="Node2D"]
 pause_mode = 2
@@ -404,6 +441,112 @@ margin_left = 243.0
 margin_right = 343.0
 margin_bottom = 16.0
 
+[node name="MainMenu" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="MainMenu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 18 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="MainMenu/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="MainMenu/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="MainMenu/Control"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -80.0
+margin_top = -381.0
+margin_right = 80.0
+custom_styles/panel = SubResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenu/Control/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/Control/Panel/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 146.0
+margin_bottom = 361.0
+
+[node name="Start" type="Button" parent="MainMenu/Control/Panel/MarginContainer/VBoxContainer"]
+margin_right = 126.0
+margin_bottom = 41.0
+focus_neighbour_right = NodePath("../Options")
+focus_neighbour_bottom = NodePath("../Options")
+focus_next = NodePath("../Options")
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 10 )
+custom_styles/focus = SubResource( 11 )
+custom_styles/disabled = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+custom_fonts/font = ExtResource( 4 )
+text = "Start"
+script = ExtResource( 16 )
+
+[node name="Options" type="Button" parent="MainMenu/Control/Panel/MarginContainer/VBoxContainer"]
+margin_top = 45.0
+margin_right = 126.0
+margin_bottom = 86.0
+focus_neighbour_left = NodePath("../Start")
+focus_neighbour_top = NodePath("../Start")
+focus_neighbour_right = NodePath("../Quit")
+focus_neighbour_bottom = NodePath("../Quit")
+focus_next = NodePath("../Quit")
+focus_previous = NodePath("../Start")
+custom_styles/hover = SubResource( 14 )
+custom_styles/pressed = SubResource( 15 )
+custom_styles/focus = SubResource( 16 )
+custom_styles/disabled = SubResource( 17 )
+custom_styles/normal = SubResource( 18 )
+custom_fonts/font = ExtResource( 4 )
+text = "Options"
+script = ExtResource( 15 )
+
+[node name="Quit" type="Button" parent="MainMenu/Control/Panel/MarginContainer/VBoxContainer"]
+margin_top = 90.0
+margin_right = 126.0
+margin_bottom = 131.0
+focus_neighbour_left = NodePath("../Options")
+focus_neighbour_top = NodePath("../Options")
+focus_previous = NodePath("../Options")
+custom_styles/hover = SubResource( 19 )
+custom_styles/pressed = SubResource( 20 )
+custom_styles/focus = SubResource( 21 )
+custom_styles/disabled = SubResource( 22 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = ExtResource( 4 )
+text = "Quit"
+script = ExtResource( 17 )
+
 [connection signal="visibility_changed" from="Pause/Control/Panel" to="Pause/Control" method="_on_Panel_visibility_changed"]
 [connection signal="pressed" from="Pause/Control/Panel/MarginContainer/VBoxContainer/Resume" to="Pause/Control/Panel/MarginContainer/VBoxContainer/Resume" method="_on_Resume_pressed"]
 [connection signal="pressed" from="Pause/Control/Panel/MarginContainer/VBoxContainer/Options" to="Pause/Control/Panel/MarginContainer/VBoxContainer/Options" method="_on_Options_pressed"]
@@ -411,3 +554,6 @@ margin_bottom = 16.0
 [connection signal="visibility_changed" from="Pause/QuitControl/Panel" to="Pause/QuitControl" method="_on_Panel_visibility_changed"]
 [connection signal="pressed" from="Pause/QuitControl/Panel/MarginContainer/VBoxContainer/QuitYes" to="Pause/QuitControl/Panel/MarginContainer/VBoxContainer/QuitYes" method="_on_QuitYes_pressed"]
 [connection signal="pressed" from="Pause/QuitControl/Panel/MarginContainer/VBoxContainer/QuitNo" to="Pause/QuitControl/Panel/MarginContainer/VBoxContainer/QuitNo" method="_on_QuitNo_pressed"]
+[connection signal="visibility_changed" from="MainMenu/Control/Panel" to="MainMenu/Control" method="_on_Panel_visibility_changed"]
+[connection signal="pressed" from="MainMenu/Control/Panel/MarginContainer/VBoxContainer/Start" to="MainMenu/Control/Panel/MarginContainer/VBoxContainer/Start" method="_on_Start_pressed"]
+[connection signal="pressed" from="MainMenu/Control/Panel/MarginContainer/VBoxContainer/Quit" to="MainMenu/Control/Panel/MarginContainer/VBoxContainer/Quit" method="_on_Quit_pressed"]
