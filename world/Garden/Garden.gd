@@ -17,7 +17,7 @@ func _ready():
 	Global.playerlocation = Global.LOCATIONS.GARDEN
 	if ((Global.events[Global.LOCATIONS.GARDEN])[0]):
 		curr_state = STATES.CS0
-		dahliaInstance = Global.instance_node_at(Dahlia, Vector2(700,400), self)
+		dahliaInstance = Global.instance_node_at(Dahlia, Vector2(700,600), self)
 		dahliaInstance.vel = Vector2(-dahliaInstance.WALK_SPEED, 0)
 	else:
 		curr_state = STATES.IDLE
