@@ -41,6 +41,11 @@ func removeAllChildren(node):
 		node.remove_child(child)
 		child.queue_free()
 
+# Music 
+func playMusic(song):
+	$Music.stream = song
+	$Music.play()
+
 # Menu Stuff
 func _input(event):
 	if (event.is_action_pressed("esc")):

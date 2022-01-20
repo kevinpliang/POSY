@@ -17,11 +17,10 @@
 [ext_resource path="res://world/Garden/Assets/Tutorial/Interact.png" type="Texture" id=15]
 [ext_resource path="res://world/Garden/Hole.gd" type="Script" id=16]
 
-[sub_resource type="CircleShape2D" id=7]
+[sub_resource type="CircleShape2D" id=1]
 radius = 77.7442
 
-[sub_resource type="Animation" id=1]
-resource_name = "enter"
+[sub_resource type="Animation" id=2]
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
@@ -35,7 +34,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.435294 ) ]
 }
 
-[sub_resource type="Theme" id=2]
+[sub_resource type="Theme" id=3]
 LineEdit/colors/clear_button_color = Color( 0.88, 0.88, 0.88, 1 )
 LineEdit/colors/clear_button_color_pressed = Color( 1, 1, 1, 1 )
 LineEdit/colors/cursor_color = Color( 0.941176, 0.941176, 0.941176, 0 )
@@ -50,16 +49,16 @@ LineEdit/styles/focus = null
 LineEdit/styles/normal = null
 LineEdit/styles/read_only = null
 
-[sub_resource type="StyleBoxEmpty" id=3]
-
 [sub_resource type="StyleBoxEmpty" id=4]
 
-[sub_resource type="DynamicFontData" id=5]
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="DynamicFontData" id=6]
 font_path = "res://resources/Fonts/STIX_Two_Math/STIXTwoMath-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=7]
 size = 48
-font_data = SubResource( 5 )
+font_data = SubResource( 6 )
 
 [node name="Garden" type="Node"]
 script = ExtResource( 2 )
@@ -183,7 +182,7 @@ script = ExtResource( 16 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer3/Hole/Area2D"]
 position = Vector2( -2.90454, -5.0824 )
-shape = SubResource( 7 )
+shape = SubResource( 1 )
 
 [node name="CanvasModulate" type="CanvasModulate" parent="CanvasLayer3"]
 color = Color( 0.6, 0.6, 0.6, 1 )
@@ -268,7 +267,7 @@ position = Vector2( 2886.6, -76.0598 )
 texture = ExtResource( 15 )
 
 [node name="Enter" type="AnimationPlayer" parent="Tutorial"]
-anims/enter = SubResource( 1 )
+anims/enter = SubResource( 2 )
 
 [node name="NameEntry" type="LineEdit" parent="."]
 visible = false
@@ -278,10 +277,10 @@ margin_right = 738.991
 margin_bottom = 405.792
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/normal = SubResource( 4 )
-custom_fonts/font = SubResource( 6 )
+theme = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+custom_fonts/font = SubResource( 7 )
 align = 1
 max_length = 20
 expand_to_text_length = true

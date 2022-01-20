@@ -3,6 +3,9 @@ extends Node
 onready var Dahlia = preload("res://characters/Dahlia.tscn")
 var dahliaInstance
 
+# Music
+onready var brisk_start = preload("res://resources/music/brisk_start.ogg")
+
 # scene state
 enum STATES {IDLE, CS0, CS1, CS2}
 var curr_state
@@ -11,9 +14,10 @@ var curr_state
 var firstP = false
 
 # yep
-var spawn = Vector2(500,500)
+var spawn = Vector2(500,600)
 
 func _ready():
+	Global.main.playMusic(brisk_start)
 	Global.playerlocation = Global.LOCATIONS.GARDEN
 	if ((Global.events[Global.LOCATIONS.GARDEN])[0]):
 		curr_state = STATES.CS0
