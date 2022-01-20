@@ -359,7 +359,9 @@ modulate = Color( 1, 0, 0, 1 )
 position = Vector2( 0, -20 )
 shape = SubResource( 44 )
 
-[node name="hurtbox" type="Area2D" parent="."]
+[node name="hurtbox" type="Area2D" parent="." groups=[
+"player",
+]]
 
 [node name="shape" type="CollisionShape2D" parent="hurtbox"]
 position = Vector2( -0.648651, -6.81618 )
