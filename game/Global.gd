@@ -14,7 +14,7 @@ enum LOCATIONS {GARDEN}
 
 # Events
 var events = {
-	LOCATIONS.GARDEN : [true],
+	LOCATIONS.GARDEN : [false],
 }
 
 func _ready():

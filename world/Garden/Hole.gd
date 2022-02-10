@@ -8,8 +8,7 @@ func _input(event):
 
 func _on_Area2D_area_entered(area):
 	if (area.is_in_group("player")):
-		active = true		
-
+		active = true
 
 func _on_Area2D_area_exited(area):
 	if (area.is_in_group("player")):

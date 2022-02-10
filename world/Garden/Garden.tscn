@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://world/Garden/Assets/Garden_tilemap.tres" type="TileSet" id=1]
 [ext_resource path="res://world/Garden/Garden.gd" type="Script" id=2]
@@ -16,23 +16,10 @@
 [ext_resource path="res://world/Garden/Assets/Environment/hole.png" type="Texture" id=14]
 [ext_resource path="res://world/Garden/Assets/Tutorial/Interact.png" type="Texture" id=15]
 [ext_resource path="res://world/Garden/Hole.gd" type="Script" id=16]
+[ext_resource path="res://world/Garden/MeetingDahliaEvent.gd" type="Script" id=17]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 77.7442
-
-[sub_resource type="Animation" id=2]
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.435294 ) ]
-}
 
 [sub_resource type="Theme" id=3]
 LineEdit/colors/clear_button_color = Color( 0.88, 0.88, 0.88, 1 )
@@ -59,6 +46,20 @@ font_path = "res://resources/Fonts/STIX_Two_Math/STIXTwoMath-Regular.ttf"
 [sub_resource type="DynamicFont" id=7]
 size = 48
 font_data = SubResource( 6 )
+
+[sub_resource type="Animation" id=2]
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.435294 ) ]
+}
 
 [node name="Garden" type="Node"]
 script = ExtResource( 2 )
@@ -245,36 +246,16 @@ __meta__ = {
 visible = false
 color = Color( 0.721569, 0.721569, 0.721569, 1 )
 
-[node name="Tutorial" type="Node2D" parent="."]
+[node name="MeetingDahliaEvent" type="Node2D" parent="."]
+position = Vector2( 500, 600 )
+script = ExtResource( 17 )
+
+[node name="NameEntry" type="LineEdit" parent="MeetingDahliaEvent"]
 visible = false
-modulate = Color( 1, 1, 1, 0.694118 )
-z_index = -1
-
-[node name="Move" type="Sprite" parent="Tutorial"]
-position = Vector2( 991.744, 458.817 )
-texture = ExtResource( 3 )
-
-[node name="Jump" type="Sprite" parent="Tutorial"]
-position = Vector2( 1742, 468 )
-texture = ExtResource( 4 )
-
-[node name="DJump" type="Sprite" parent="Tutorial"]
-position = Vector2( 2204, 314 )
-texture = ExtResource( 5 )
-
-[node name="Interact" type="Sprite" parent="Tutorial"]
-position = Vector2( 2886.6, -76.0598 )
-texture = ExtResource( 15 )
-
-[node name="Enter" type="AnimationPlayer" parent="Tutorial"]
-anims/enter = SubResource( 2 )
-
-[node name="NameEntry" type="LineEdit" parent="."]
-visible = false
-margin_left = 338.991
-margin_top = 356.792
-margin_right = 738.991
-margin_bottom = 405.792
+margin_left = -161.009
+margin_top = -243.208
+margin_right = 238.991
+margin_bottom = -194.208
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource( 3 )
@@ -290,6 +271,31 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Tutorial" type="Node2D" parent="MeetingDahliaEvent"]
+visible = false
+modulate = Color( 1, 1, 1, 0.694118 )
+position = Vector2( -500, -600 )
+z_index = -1
+
+[node name="Move" type="Sprite" parent="MeetingDahliaEvent/Tutorial"]
+position = Vector2( 991.744, 458.817 )
+texture = ExtResource( 3 )
+
+[node name="Jump" type="Sprite" parent="MeetingDahliaEvent/Tutorial"]
+position = Vector2( 1742, 468 )
+texture = ExtResource( 4 )
+
+[node name="DJump" type="Sprite" parent="MeetingDahliaEvent/Tutorial"]
+position = Vector2( 2204, 314 )
+texture = ExtResource( 5 )
+
+[node name="Interact" type="Sprite" parent="MeetingDahliaEvent/Tutorial"]
+position = Vector2( 2886.6, -76.0598 )
+texture = ExtResource( 15 )
+
+[node name="Enter" type="AnimationPlayer" parent="MeetingDahliaEvent/Tutorial"]
+anims/enter = SubResource( 2 )
+
 [connection signal="area_entered" from="CanvasLayer3/Hole/Area2D" to="CanvasLayer3/Hole" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="CanvasLayer3/Hole/Area2D" to="CanvasLayer3/Hole" method="_on_Area2D_area_exited"]
-[connection signal="text_entered" from="NameEntry" to="." method="_on_NameEntry_text_entered"]
+[connection signal="text_entered" from="MeetingDahliaEvent/NameEntry" to="MeetingDahliaEvent" method="_on_NameEntry_text_entered"]
