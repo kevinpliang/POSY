@@ -39,10 +39,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://world/Events/Event.gd"
 }, {
-"base": "Node",
-"class": "Location",
+"base": "Sprite",
+"class": "Hole",
 "language": "GDScript",
-"path": "res://world/Location.gd"
+"path": "res://objects/hole/Hole.gd"
 } ]
 _global_script_class_icons={
 "Dialogic": "",
@@ -51,7 +51,7 @@ _global_script_class_icons={
 "DialogicResources": "",
 "DialogicUtil": "",
 "Event": "",
-"Location": ""
+"Hole": ""
 }
 
 [application]
