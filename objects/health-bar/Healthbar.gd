@@ -12,9 +12,9 @@ func _ready():
 
 func _on_health_changed(amount):
 	if amount < 0:
-		for i in range(amount, 0):
+		for _i in range(amount, 0):
 			var lost_petal = children.pop_front()
 			lost_petal.queue_free()
 
-func _process(delta):
+func _process(_delta):
 	pass

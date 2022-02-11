@@ -16,7 +16,7 @@
 [ext_resource path="res://objects/hole/Hole.tscn" type="PackedScene" id=14]
 [ext_resource path="res://world/Garden/Assets/Tutorial/Interact.png" type="Texture" id=15]
 [ext_resource path="res://world/Garden/HoleToGarden.gd" type="Script" id=16]
-[ext_resource path="res://world/Garden/MeetingDahliaEvent.gd" type="Script" id=17]
+[ext_resource path="res://world/Garden/Events/MeetingDahliaEvent.gd" type="Script" id=17]
 [ext_resource path="res://world/Garden/Assets/Environment/hole.png" type="Texture" id=18]
 
 [sub_resource type="Theme" id=1]

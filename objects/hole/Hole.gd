@@ -11,7 +11,7 @@ export(Texture) var sprite
 func _ready():
 	texture = sprite
 
-func _process(delta):
+func _process(_delta):
 	if(self.global_position.distance_to(Global.player.global_position) < 75):
 		active = true
 	else:

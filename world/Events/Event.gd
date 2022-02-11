@@ -15,7 +15,7 @@ var current_state
 func _ready():
 	current_state = STATES.IDLE
 
-func _process(delta):
+func _process(_delta):
 	if current_state == STATES.IDLE:
 		if (not occured) or repeating:
 			if self.global_position.distance_to(Global.player.global_position) < activation_range:

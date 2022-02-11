@@ -44,7 +44,7 @@ func cutscene1():
 	add_child(Garden1)
 	Garden1.connect("timeline_end", self, "showNameEntry")
 
-func showNameEntry(timeline_end):
+func showNameEntry(_timeline_end):
 	$NameEntry.visible = true
 	$NameEntry.grab_focus()
 	
@@ -67,7 +67,7 @@ func isValidName(name) -> bool:
 		return false
 	return true
 
-func cutscene2(timeline_end):
+func cutscene2(_timeline_end):
 	current_running_state = RUNNING_STATES.CS2
 	dahliaInstance.vel = Vector2(dahliaInstance.WALK_SPEED,0)
 	dahliaInstance.visibilityNotifier.connect("screen_exited", self, "cutscene2end")

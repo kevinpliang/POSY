@@ -10,11 +10,14 @@ var player = null
 var savepath = "user://save.dat"
 var playername = "Zee"
 var playerlocation
-enum LOCATIONS {GARDEN}
+enum LOCATIONS {GARDEN, VILLAGE, DEPTHS, MOUNTAIN}
 
 # Events
 var events = {
-	LOCATIONS.GARDEN : [false],
+	LOCATIONS.GARDEN   : [false],
+	LOCATIONS.VILLAGE  : [],
+	LOCATIONS.DEPTHS   : [],
+	LOCATIONS.MOUNTAIN : [],
 }
 
 func _ready():

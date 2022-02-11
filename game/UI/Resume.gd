@@ -3,7 +3,7 @@ extends Button
 func _ready():
 	pass 
 
-func _process(delta):
+func _process(_delta):
 	if (visible):
 		if (is_hovered()):
 			grab_focus()
