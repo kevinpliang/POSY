@@ -4,18 +4,23 @@ class_name Hole
 
 var dest
 var active = false
+var input_required = false
+
+func _process(delta):
+	if(self.global_position.distance_to(Global.player.global_position) < 75):
+		active = true
+	else:
+		active = false
+	if active and !input_required:
+		go()
 
 func _input(event):
 	if (event.is_action_pressed("a") and active):
-		Global.main.movePlayer(dest)
+		go()
 
-func _on_Area2D_area_entered(area):
-	if (area.is_in_group("player")):
-		active = true
-
-func _on_Area2D_area_exited(area):
-	if (area.is_in_group("player")):
-		active = false
-
-func _init(d):
+func _init(d, ir):
 	dest = d
+	input_required = ir
+
+func go():
+	Global.main.enterHole(dest)

@@ -1,4 +1,4 @@
 extends Hole
 
-func _init().(Global.LOCATIONS.GARDEN):
+func _init().(Global.LOCATIONS.GARDEN, false):
 	pass

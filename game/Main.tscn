@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://game/Main.gd" type="Script" id=1]
 [ext_resource path="res://resources/Fonts/Arial/arial.ttf" type="DynamicFontData" id=2]
@@ -22,6 +22,38 @@
 [sub_resource type="DynamicFont" id=1]
 size = 40
 font_data = ExtResource( 2 )
+
+[sub_resource type="Animation" id=24]
+resource_name = "fade_in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=25]
+resource_name = "fade_out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
+}
 
 [sub_resource type="StyleBoxEmpty" id=2]
 
@@ -113,6 +145,19 @@ custom_fonts/font = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Fade" type="ColorRect" parent="UI"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player" type="AnimationPlayer" parent="UI/Fade"]
+anims/fade_in = SubResource( 24 )
+anims/fade_out = SubResource( 25 )
 
 [node name="Pause" type="CanvasLayer" parent="."]
 layer = 15
@@ -552,6 +597,7 @@ script = ExtResource( 17 )
 max_distance = 1e+10
 bus = "Music"
 
+[connection signal="animation_finished" from="UI/Fade/Player" to="." method="_on_Player_animation_finished"]
 [connection signal="visibility_changed" from="Pause/Control/Panel" to="Pause/Control" method="_on_Panel_visibility_changed"]
 [connection signal="pressed" from="Pause/Control/Panel/MarginContainer/VBoxContainer/Resume" to="Pause/Control/Panel/MarginContainer/VBoxContainer/Resume" method="_on_Resume_pressed"]
 [connection signal="pressed" from="Pause/Control/Panel/MarginContainer/VBoxContainer/Options" to="Pause/Control/Panel/MarginContainer/VBoxContainer/Options" method="_on_Options_pressed"]

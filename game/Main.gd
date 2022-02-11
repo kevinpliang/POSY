@@ -28,10 +28,10 @@ func startGame():
 	else:
 		movePlayer(Global.LOCATIONS.GARDEN)
 		
-func movePlayer(to):
+func movePlayer(dest):
 	removeAllChildren($Game)
-	Global.playerlocation = sceneOf[to]
-	var new_location_instance = Global.instance_node(sceneOf[to], $Game)
+	Global.playerlocation = sceneOf[dest]
+	var new_location_instance = Global.instance_node(sceneOf[dest], $Game)
 	Global.player = Global.instance_node_at(Zee, new_location_instance.spawn, $Game)
 	Global.instance_node_at(HealthBar, Vector2(125,125), $UI)
 
@@ -70,6 +70,21 @@ func toggleOptions():
 func toggleQuit():
 	$Pause/Control.visible = !$Pause/Control.visible
 	$Pause/QuitControl.visible = !$Pause/QuitControl.visible
-	
+
 func showSave():
 	saveIconInstance = Global.instance_node(SaveIcon, $UI)
+
+var playerDest
+func enterHole(dest):
+	Global.player.can_move = false
+	$UI/Fade.visible = true
+	playerDest = dest
+	$UI/Fade/Player.play("fade_in")
+
+func _on_Player_animation_finished(anim_name):
+	if anim_name == "fade_in":
+		movePlayer(playerDest)
+		$UI/Fade/Player.play("fade_out")
+	if anim_name == "fade_out":
+		$UI/Fade.visible = false
+		Global.player.can_move = true
