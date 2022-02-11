@@ -29,6 +29,7 @@ func trigger_event():
 	
 func end_event():
 	.end_event()
+	Global.saveGame()
 	
 # makes it so accepting name prompt doesn't auto fill "p" in text box
 func _input(event):
@@ -77,7 +78,6 @@ func cutscene2end():
 	$Tutorial.visible = true
 	$Tutorial/Enter.play("enter")
 	(Global.events[Global.LOCATIONS.GARDEN])[0] = false
-	Global.saveGame()
 	end_event()
 
 
