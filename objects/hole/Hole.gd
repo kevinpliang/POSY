@@ -6,6 +6,11 @@ var dest
 var active = false
 var input_required = false
 
+export(Texture) var sprite
+
+func _ready():
+	texture = sprite
+
 func _process(delta):
 	if(self.global_position.distance_to(Global.player.global_position) < 75):
 		active = true

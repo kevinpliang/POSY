@@ -23,7 +23,7 @@
 size = 40
 font_data = ExtResource( 2 )
 
-[sub_resource type="Animation" id=24]
+[sub_resource type="Animation" id=2]
 resource_name = "fade_in"
 length = 0.5
 tracks/0/type = "value"
@@ -39,7 +39,7 @@ tracks/0/keys = {
 "values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
 }
 
-[sub_resource type="Animation" id=25]
+[sub_resource type="Animation" id=3]
 resource_name = "fade_out"
 length = 0.5
 tracks/0/type = "value"
@@ -54,10 +54,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
 }
-
-[sub_resource type="StyleBoxEmpty" id=2]
-
-[sub_resource type="StyleBoxEmpty" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=4]
 
@@ -98,6 +94,10 @@ tracks/0/keys = {
 [sub_resource type="StyleBoxEmpty" id=22]
 
 [sub_resource type="StyleBoxEmpty" id=23]
+
+[sub_resource type="StyleBoxEmpty" id=24]
+
+[sub_resource type="StyleBoxEmpty" id=25]
 
 [node name="Main" type="Node2D"]
 pause_mode = 2
@@ -156,8 +156,8 @@ __meta__ = {
 }
 
 [node name="Player" type="AnimationPlayer" parent="UI/Fade"]
-anims/fade_in = SubResource( 24 )
-anims/fade_out = SubResource( 25 )
+anims/fade_in = SubResource( 2 )
+anims/fade_out = SubResource( 3 )
 
 [node name="Pause" type="CanvasLayer" parent="."]
 layer = 15
@@ -188,7 +188,7 @@ margin_left = -200.0
 margin_top = -110.0
 margin_right = 200.0
 margin_bottom = 110.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -237,11 +237,11 @@ margin_bottom = 88.0
 focus_neighbour_right = NodePath("../Options")
 focus_neighbour_bottom = NodePath("../Options")
 focus_next = NodePath("../Options")
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/disabled = SubResource( 6 )
-custom_styles/normal = SubResource( 7 )
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 7 )
+custom_styles/disabled = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
 custom_fonts/font = ExtResource( 3 )
 shortcut_in_tooltip = false
 text = "Resume"
@@ -261,11 +261,11 @@ focus_neighbour_right = NodePath("../Quit")
 focus_neighbour_bottom = NodePath("../Quit")
 focus_next = NodePath("../Quit")
 focus_previous = NodePath("../Resume")
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/disabled = SubResource( 6 )
-custom_styles/normal = SubResource( 7 )
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 7 )
+custom_styles/disabled = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
 custom_fonts/font = ExtResource( 3 )
 text = "Options"
 script = ExtResource( 7 )
@@ -281,11 +281,11 @@ margin_bottom = 178.0
 focus_neighbour_left = NodePath("../Options")
 focus_neighbour_top = NodePath("../Options")
 focus_previous = NodePath(".")
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/disabled = SubResource( 6 )
-custom_styles/normal = SubResource( 7 )
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 7 )
+custom_styles/disabled = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
 custom_fonts/font = ExtResource( 3 )
 text = "Quit"
 script = ExtResource( 8 )
@@ -319,7 +319,7 @@ margin_left = -200.0
 margin_top = -110.0
 margin_right = 200.0
 margin_bottom = 110.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -368,11 +368,11 @@ margin_bottom = 110.0
 focus_neighbour_right = NodePath("../QuitNo")
 focus_neighbour_bottom = NodePath("../QuitNo")
 focus_next = NodePath("../QuitNo")
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/disabled = SubResource( 6 )
-custom_styles/normal = SubResource( 7 )
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 7 )
+custom_styles/disabled = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
 custom_fonts/font = ExtResource( 3 )
 shortcut_in_tooltip = false
 text = "Yes"
@@ -389,11 +389,11 @@ margin_bottom = 155.0
 focus_neighbour_left = NodePath("../QuitYes")
 focus_neighbour_top = NodePath("../QuitYes")
 focus_previous = NodePath("../QuitYes")
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/disabled = SubResource( 6 )
-custom_styles/normal = SubResource( 7 )
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = SubResource( 7 )
+custom_styles/disabled = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
 custom_fonts/font = ExtResource( 3 )
 text = "No"
 script = ExtResource( 11 )
@@ -429,7 +429,7 @@ margin_left = -200.0
 margin_top = -110.0
 margin_right = 200.0
 margin_bottom = 110.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -521,7 +521,7 @@ anchor_bottom = 1.0
 margin_left = -80.0
 margin_top = -381.0
 margin_right = 80.0
-custom_styles/panel = SubResource( 8 )
+custom_styles/panel = SubResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -549,11 +549,11 @@ margin_bottom = 41.0
 focus_neighbour_right = NodePath("../Options")
 focus_neighbour_bottom = NodePath("../Options")
 focus_next = NodePath("../Options")
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 10 )
-custom_styles/focus = SubResource( 11 )
-custom_styles/disabled = SubResource( 12 )
-custom_styles/normal = SubResource( 13 )
+custom_styles/hover = SubResource( 11 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/focus = SubResource( 13 )
+custom_styles/disabled = SubResource( 14 )
+custom_styles/normal = SubResource( 15 )
 custom_fonts/font = ExtResource( 4 )
 text = "Start"
 script = ExtResource( 16 )
@@ -568,11 +568,11 @@ focus_neighbour_right = NodePath("../Quit")
 focus_neighbour_bottom = NodePath("../Quit")
 focus_next = NodePath("../Quit")
 focus_previous = NodePath("../Start")
-custom_styles/hover = SubResource( 14 )
-custom_styles/pressed = SubResource( 15 )
-custom_styles/focus = SubResource( 16 )
-custom_styles/disabled = SubResource( 17 )
-custom_styles/normal = SubResource( 18 )
+custom_styles/hover = SubResource( 16 )
+custom_styles/pressed = SubResource( 17 )
+custom_styles/focus = SubResource( 18 )
+custom_styles/disabled = SubResource( 19 )
+custom_styles/normal = SubResource( 20 )
 custom_fonts/font = ExtResource( 4 )
 text = "Options"
 script = ExtResource( 15 )
@@ -584,11 +584,11 @@ margin_bottom = 131.0
 focus_neighbour_left = NodePath("../Options")
 focus_neighbour_top = NodePath("../Options")
 focus_previous = NodePath("../Options")
-custom_styles/hover = SubResource( 19 )
-custom_styles/pressed = SubResource( 20 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 22 )
-custom_styles/normal = SubResource( 23 )
+custom_styles/hover = SubResource( 21 )
+custom_styles/pressed = SubResource( 22 )
+custom_styles/focus = SubResource( 23 )
+custom_styles/disabled = SubResource( 24 )
+custom_styles/normal = SubResource( 25 )
 custom_fonts/font = ExtResource( 4 )
 text = "Quit"
 script = ExtResource( 17 )
