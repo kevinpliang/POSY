@@ -15,7 +15,7 @@
 [ext_resource path="res://world/Garden/Assets/Environment/clover1.png" type="Texture" id=13]
 [ext_resource path="res://objects/hole/Hole.tscn" type="PackedScene" id=14]
 [ext_resource path="res://world/Garden/Assets/Tutorial/Interact.png" type="Texture" id=15]
-[ext_resource path="res://world/Garden/HoleToGarden.gd" type="Script" id=16]
+[ext_resource path="res://world/Garden/HoleVillage.gd" type="Script" id=16]
 [ext_resource path="res://world/Garden/Events/MeetingDahliaEvent.gd" type="Script" id=17]
 [ext_resource path="res://world/Garden/Assets/Environment/hole.png" type="Texture" id=18]
 
@@ -75,7 +75,7 @@ tile_data = PoolIntArray( -1310740, 21, 0, -1310739, 21, 0, -1310738, 21, 0, -13
 [node name="CanvasLayer3" type="CanvasLayer" parent="."]
 layer = -1
 follow_viewport_enable = true
-follow_viewport_scale = 0.99
+follow_viewport_scale = 0.98
 
 [node name="Sprite23" type="Sprite" parent="CanvasLayer3"]
 position = Vector2( 2861.16, 104.301 )
@@ -114,7 +114,7 @@ position = Vector2( 2119.19, 498.929 )
 texture = ExtResource( 8 )
 
 [node name="Sprite" type="Sprite" parent="CanvasLayer3"]
-position = Vector2( 471.21, 481.29 )
+position = Vector2( 469.428, 497.326 )
 texture = ExtResource( 8 )
 flip_h = true
 
@@ -223,12 +223,13 @@ follow_viewport_scale = 0.5
 anchor_top = -0.00138798
 anchor_right = 1.0
 anchor_bottom = 0.998612
-margin_left = -1339.62
-margin_top = -4724.12
-margin_right = 19405.4
-margin_bottom = 5840.88
+margin_left = -8858.01
+margin_top = -6093.96
+margin_right = 11887.0
+margin_bottom = 4471.04
 color = Color( 0.419608, 0.572549, 0.737255, 1 )
 __meta__ = {
+"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 

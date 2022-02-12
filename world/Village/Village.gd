@@ -15,5 +15,6 @@ onready var events = {
 func _ready():
 	Global.main.playMusic(brisk_start)
 	Global.playerlocation = GLI
-	for i in range(0,events_occured.size()):
+	for i in range(events_occured.size()):
 		events[i].occured = events_occured[i]
+	Global.saveGame()

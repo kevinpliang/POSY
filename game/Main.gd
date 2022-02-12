@@ -7,9 +7,15 @@ onready var SaveIcon = preload("res://objects/save-notif/SaveIcon.tscn")
 onready var saveIconInstance
 
 # Worlds
-onready var Garden = preload("res://world/Garden/Garden.tscn")
+onready var Garden  = preload("res://world/Garden/Garden.tscn")
+onready var Village = preload("res://world/Village/Village.tscn")
+onready var Depths = preload("res://world/Depths/Depths.tscn")
+onready var Mountain = preload("res://world/Mountain/Mountain.tscn")
 onready var sceneOf = {
 	Global.LOCATIONS.GARDEN: Garden,
+	Global.LOCATIONS.VILLAGE: Village,
+	Global.LOCATIONS.DEPTHS: Depths,
+	Global.LOCATIONS.MOUNTAIN: Mountain,
 }
 
 # Called when the node enters the scene tree for the first time.

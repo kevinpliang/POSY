@@ -8,7 +8,7 @@ var spawn = Vector2(500,600)
 
 onready var GLI = Global.LOCATIONS.GARDEN
 onready var events_occured = Global.events[GLI]
-onready var events = {
+onready var myEvents = {
 	0 : $MeetingDahliaEvent
 }
 
@@ -16,4 +16,4 @@ func _ready():
 	Global.main.playMusic(brisk_start)
 	Global.playerlocation = GLI
 	for i in range(0,events_occured.size()):
-		events[i].occured = events_occured[i]
+		myEvents[i].occured = events_occured[i]
